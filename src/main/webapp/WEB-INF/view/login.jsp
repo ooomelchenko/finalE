@@ -1,28 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+<%@ page session="true" %>
+
 <base href="${pageContext.request.contextPath}/"/>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="content"/>
 
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Doctor App</title>
+    <title>login</title>
 </head>
-    <body>
-        <h2>
-            Hello WEB! <br/>
-        </h2>
+<body>
+<header>
+    <h2>
+        Hello !
+    </h2>
+</header>
+<br>
 
-        <br/>
+<c:out value="${requestScope.message} "/>
+<form method="GET" action="login">
+    <input type="text" placeholder="content.input.login" name="login"/><br>
+    <input type="password" placeholder="content.input.password" name="password"/><br>
+    <input type="submit" value="content.input.send"/>
+</form>
 
-        <br>
-        <form method="GET" action="login">
-            <input type="text" placeholder="content.input.login" name="login"/><br>
-            <input type="password" placeholder="content.input.password" name = "password"/><br>
-            <input type="text" placeholder="content.input.firstname" name = "firstname"/><br>
-            <input type="text" placeholder="content.input.lastname" name = "lastname"/><br>
-            <input type="email" placeholder="content.input.email" name = "email"/><br>
-
-            <input type="submit" value="content.input.send" />
-        </form>
-
-    </body>
+</body>
 </html>
