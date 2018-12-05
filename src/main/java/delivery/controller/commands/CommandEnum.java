@@ -8,6 +8,8 @@ public enum CommandEnum {
     EMPTY ("EMPTY", new EmptyCommand()) {},
     GUEST ("GUEST", new GuestCommand()) {},
     LOGIN ("LOGIN", new LoginCommand()) {},
+    REGISTRATION("REGISTRATION", new RegistrationCommand()){},
+    REGISTRATIONVALID("REGISTRATIONVALID", new RegistrationValidCommand()){},
     USER ("USER", new UserCommand()) {},
     ADMIN ("ADMIN", new AdminCommand()) {};
     /*

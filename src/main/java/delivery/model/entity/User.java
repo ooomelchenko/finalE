@@ -1,6 +1,5 @@
 package delivery.model.entity;
 
-import delivery.model.entity.enums.Role;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,43 @@ public class User {
     private Role role;
     private List<Order> orders = new ArrayList<>();
 
+    public enum Role {
+        GUEST("guest:redirect"){},
+        USER("user:redirect"){},
+        ADMIN("admin:redirect"){};
+
+        private String roleBasePath;
+
+        public String getRoleBasePath() {
+            return roleBasePath;
+        }
+
+        Role(String path){
+            roleBasePath = path;
+        }
+    }
+
     public User() {
+    }
+
+    public User(String login, String password, String firstName, String lastName, String email, Role role) {
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+    }
+
+    public User(long id, String login, String password, String firstName, String lastName, String email, Role role, List<Order> orders) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.orders = orders;
     }
 
     public long getId() {
@@ -73,5 +108,6 @@ public class User {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+
 
 }
