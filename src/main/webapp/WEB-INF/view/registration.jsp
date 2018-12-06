@@ -27,14 +27,14 @@
 
     <input type="email" placeholder="<fmt:message key="input.email"/>" name = "email" value="${requestScope.userDTO.getEmail()}"/><br>
 
-    <select>
-        <c:forEach var="role" items="${enumRoles}">
-            <option value="${role.name()}"  <c:if test="${role.name()}=${requestScope.userDTO.getRole().name()}">selected="selected"</c:if> >
-                <c:out value="${role.name()}"/>
-            </option>
-        </c:forEach>
-    </select>
-
+        <select name="role">
+            <c:forEach var="role" items="${enumRoles}">
+                <option value="${role.name()}"  <c:if test="${role.name()}=${requestScope.userDTO.getRole().name()}">selected="selected"</c:if> >
+                    <c:out value="${role.name()}"/>
+                </option>
+            </c:forEach>
+        </select>
+    <br>
     <input type="submit" value="<fmt:message key="input.send"/>" />
 </form>
 
