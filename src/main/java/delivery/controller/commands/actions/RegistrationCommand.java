@@ -32,7 +32,7 @@ public class RegistrationCommand implements Command {
         }
         else {
             List<String> wrongFields = userService.validateFields(login, password, firstname, lastname, email, role);
-            if (wrongFields!=null){
+            if (wrongFields==null){
                 userService.create(login, password, firstname, lastname, email, role);
                 request.setAttribute("message", MessageManager.getProperty("registration.success"));
                 return "login:redirect";

@@ -1,12 +1,10 @@
 package delivery.model.dao;
 
+import delivery.controller.commands.SqlQueryManager;
 import delivery.model.dao.mapper.UserMapper;
 import delivery.model.entity.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,14 +12,27 @@ public class UserDaoImpl implements UserDao {
 
     private Connection connection;
 
-
-    public UserDaoImpl(Connection connection) {
+    UserDaoImpl(Connection connection) {
         this.connection = connection;
     }
 
     @Override
     public void create(User user) {
-
+        //CallableStatement
+        System.out.println("user.getRole().name() = "+user.getRole().name());
+        System.out.println(user);
+        try(CallableStatement ps = connection.prepareCall("INSERT into users SET login, password, firstName, lastName, email, role")){
+            ps.setString("login", user.getLogin());
+            ps.setString( "password", user.getPassword());
+            ps.setString( "firstName", user.getFirstName());
+            ps.setString( "lastName", user.getLastName());
+            ps.setString( "email", user.getEmail());
+            ps.setString( "role", user.getRole().name());
+            ps.execute();
+            System.out.println("execute "+user);
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
@@ -32,7 +43,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAll() {
         /*Map<Integer, User> users = new HashMap<>();
-        Map<Integer, Order> users = new HashMap<>();
+        Map<Integer, Order> orders = new HashMap<>();
 
         final String query = "" +
                 " select * from users" +
@@ -42,16 +53,16 @@ public class UserDaoImpl implements UserDao {
             ResultSet rs = st.executeQuery(query);
 
             UserMapper userMapper = new UserMapper();
-            UserMapper userMapper = new UserMapper();
+            UserMapper orderMapper = new UserMapper();
 
             while (rs.next()) {
                 User user = userMapper
                         .extractFromResultSet(rs);
-                Order user = userMapper
+                Order order = userMapper
                         .extractFromResultSet(rs);
                 user = userMapper
                         .makeUnique(users, user);
-                user = userMapper
+                order = userMapper
                         .makeUnique(users, user);
                 user.getUsers().add(user);
             }
@@ -83,11 +94,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findByName(String name) {
+    public Optional<User> findByLoginPassword(String login, String password) {
 
         Optional<User> result = Optional.empty();
-        try(PreparedStatement ps = connection.prepareCall("SELECT * FROM users WHERE name = ?")){
-            ps.setString( 1, name);
+        try(PreparedStatement ps = connection.prepareCall(SqlQueryManager.getProperty("user.findByLoginPassword"))){
+            ps.setString( 1, login);
+            ps.setString( 2, password);
             ResultSet rs;
             rs = ps.executeQuery();
             UserMapper mapper = new UserMapper();

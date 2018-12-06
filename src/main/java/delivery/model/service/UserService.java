@@ -1,27 +1,20 @@
 package delivery.model.service;
 
-import delivery.model.dao.DaoFactoryAbst;
-import delivery.model.dao.UserDao;
 import delivery.model.entity.User;
 
 import java.util.List;
 import java.util.Optional;
 
-public class UserService {
+public interface UserService {
 
-    DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();
+    List<User> getAllUsers();
 
-    public List<User> getAllStudents(){
-        try (UserDao dao = daoFactoryAbst.createUserDao()) {
-            return dao.findAll();
-        }
-    }
+    Optional<User> login(String login, String pass);
 
-    public Optional<User> login(String name){
-        Optional<User> result; //= Optional.empty();
-        try(UserDao userDao = daoFactoryAbst.createUserDao()){
-            result = userDao.findByName(name);
-        }
-        return result;
-    }
+    List<String> validateFields(String login, String pass, String firstName, String lastName, String email, String role);
+
+    User create(User user);
+
+    User create(String login, String pass, String firstName, String lastName, String email, String role);
+
 }

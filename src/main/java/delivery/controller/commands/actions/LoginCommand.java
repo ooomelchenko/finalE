@@ -2,6 +2,7 @@ package delivery.controller.commands.actions;
 
 import delivery.controller.commands.Command;
 import delivery.controller.commands.CommandEnum;
+import delivery.controller.commands.MessageManager;
 import delivery.model.entity.User;
 import delivery.model.service.UserService;
 import delivery.model.service.UserServiceImpl;
@@ -30,7 +31,7 @@ public class LoginCommand implements Command {
             return CommandEnum.EMPTY.getCurrentCommand().execute(request);
         }
         else {
-            request.setAttribute("message", "messages.content.wrongLoginData");
+            request.setAttribute("message", MessageManager.getProperty("login.wrongLoginData"));
             return "WEB-INF/view/login.jsp";
         }
     }
