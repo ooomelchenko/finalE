@@ -22,7 +22,7 @@
 <br>
 
 <c:out value="${requestScope.message} "/>
-<form method="GET" action="login">
+<form method="POST" action="login">
     <input type="text" placeholder="content.input.login" name="login"/><br>
     <input type="password" placeholder="content.input.password" name="password"/><br>
     <input type="submit" value="content.input.send"/>
