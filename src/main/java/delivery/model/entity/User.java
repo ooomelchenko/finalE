@@ -11,11 +11,11 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private Role role;
+    private Role role = Role.GUEST;
     private List<Order> orders = new ArrayList<>();
 
     public enum Role {
-        GUEST("guest:redirect"){},
+        GUEST("WEB-INF/view/index.jsp"){},
         USER("user:redirect"){},
         ADMIN("admin:redirect"){};
 

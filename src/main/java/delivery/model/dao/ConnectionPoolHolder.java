@@ -1,6 +1,6 @@
 package delivery.model.dao;
 
-import delivery.controller.commands.ConfigurationManager;
+import delivery.util.bundleManagers.ConfigurationManager;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import javax.sql.DataSource;

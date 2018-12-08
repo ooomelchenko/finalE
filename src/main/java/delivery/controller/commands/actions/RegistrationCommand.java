@@ -1,18 +1,20 @@
 package delivery.controller.commands.actions;
 
 import delivery.controller.commands.Command;
-import delivery.controller.commands.MessageManager;
+import delivery.util.bundleManagers.MessageManager;
 import delivery.model.entity.User;
 import delivery.model.service.UserService;
 import delivery.model.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RegistrationCommand implements Command {
 
-    UserService userService = new UserServiceImpl();
+    private UserService userService = new UserServiceImpl();
+    private Map<String, String > fieldsMap = new ConcurrentHashMap<>();
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -24,29 +26,35 @@ public class RegistrationCommand implements Command {
         String email = request.getParameter("email");
         String role = request.getParameter("role");
 
-        if (login==null) {
+        if (login == null) {
             request.setAttribute("enumRoles", Arrays.stream(User.Role.values())
-                    .filter(r->!r.name().equals("GUEST"))
+                    .filter(r -> !r.name().equals("GUEST"))
                     .toArray());
             return "WEB-INF/view/registration.jsp";
         }
-        else {
-            List<String> wrongFields = userService.validateFields(login, password, firstname, lastname, email, role);
-            if (wrongFields==null){
-                userService.create(login, password, firstname, lastname, email, role);
-                request.setAttribute("message", MessageManager.getProperty("registration.success"));
-                return "login:redirect";
+
+        fieldsMap.put("login", login);
+        fieldsMap.put("password", password);
+        fieldsMap.put("firstname", firstname);
+        fieldsMap.put("lastname", lastname);
+        fieldsMap.put("email", email);
+
+        Map<String, String> wrongFields = userService.validateFields(fieldsMap);
+        System.out.println(wrongFields);
+        if (wrongFields.isEmpty()) {
+            userService.create(login, password, firstname, lastname, email, role);
+            request.setAttribute("message", MessageManager.getProperty("registration.success"));
+            return "login:redirect";
+        } else {
+            for (String field : wrongFields.keySet()) {
+                request.setAttribute("wrong_" + field, MessageManager.getProperty("wrong." + field));
             }
-            else{
-                /*for(String field: wrongFields){
-                    request.setAttribute("wrong."+field, MessageManager.getProperty("wrong."+field));
-                }*/
-                request.setAttribute("userDTO", new User(login, password, firstname, lastname, email, User.Role.valueOf("USER")));
-                request.setAttribute("enumRoles", Arrays.stream(User.Role.values())
-                        .filter(r->!r.name().equals("GUEST"))
-                        .toArray());
-                return "WEB-INF/view/registration.jsp";
-            }
+            request.setAttribute("userDTO", new User(login, password, firstname, lastname, email, User.Role.valueOf(role)));
+            request.setAttribute("enumRoles", Arrays.stream(User.Role.values())
+                    .filter(r -> !r.name().equals("GUEST"))
+                    .toArray());
+            return "WEB-INF/view/registration.jsp";
         }
+
     }
 }

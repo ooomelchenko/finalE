@@ -2,7 +2,6 @@ package delivery.controller;
 
 import delivery.controller.commands.ActionFactory;
 import delivery.controller.commands.Command;
-import delivery.controller.commands.MessageManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,20 +11,27 @@ import java.io.IOException;
 
 
 public class Servlet extends HttpServlet {
+    //private final static Logger log = Logger.getLogger(Servlet.class);
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+     //   response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
         processRequest(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+       // response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
         processRequest(request, response);
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-
+       // log.debug("processRequest");
         String page ;
 
         ActionFactory client = new ActionFactory();
@@ -39,13 +45,6 @@ public class Servlet extends HttpServlet {
                 request.getRequestDispatcher(page).forward(request, response);
             }
         }
-        else {
-// установка страницы c cообщением об ошибке
-            System.out.println("page = \"Error.jsp\";");
-            page = "Error.jsp";
-            request.getSession().setAttribute("nullPage",
-                    MessageManager.getProperty("message.nullpage"));
-            response.sendRedirect(request.getContextPath() + page);
-        }
+
     }
 }

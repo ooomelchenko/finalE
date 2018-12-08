@@ -6,7 +6,7 @@ import delivery.exceptions.WrongCommandException;
 public enum CommandEnum {
 
     EMPTY ("EMPTY", new EmptyCommand()) {},
-    GUEST ("GUEST", new GuestCommand()) {},
+ //   GUEST ("GUEST", new GuestCommand()) {},
     LOGIN ("LOGIN", new LoginCommand()) {},
     REGISTRATION("REGISTRATION", new RegistrationCommand()){},
     REGISTRATIONVALID("REGISTRATIONVALID", new RegistrationValidCommand()){},

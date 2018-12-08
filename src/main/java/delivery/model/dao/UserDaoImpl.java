@@ -1,6 +1,6 @@
 package delivery.model.dao;
 
-import delivery.controller.commands.SqlQueryManager;
+import delivery.util.bundleManagers.SqlQueryManager;
 import delivery.model.dao.mapper.UserMapper;
 import delivery.model.entity.User;
 
@@ -18,25 +18,23 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void create(User user) {
-        //CallableStatement
-        System.out.println("user.getRole().name() = "+user.getRole().name());
-        System.out.println(user);
-        try(CallableStatement ps = connection.prepareCall("INSERT into users SET login, password, firstName, lastName, email, role")){
-            ps.setString("login", user.getLogin());
-            ps.setString( "password", user.getPassword());
-            ps.setString( "firstName", user.getFirstName());
-            ps.setString( "lastName", user.getLastName());
-            ps.setString( "email", user.getEmail());
-            ps.setString( "role", user.getRole().name());
+
+        try(PreparedStatement ps = connection.prepareStatement
+                (SqlQueryManager.getProperty("user.createUser"))){
+            ps.setString(1, user.getLogin());
+            ps.setString( 2, user.getPassword());
+            ps.setString( 3, user.getFirstName());
+            ps.setString( 4, user.getLastName());
+            ps.setString( 5, user.getEmail());
+            ps.setString( 6, user.getRole().name());
             ps.execute();
-            System.out.println("execute "+user);
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
     }
 
     @Override
-    public User findById(int id) {
+    public User findById(long id) {
         return null;
     }
 
@@ -80,7 +78,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
 
     }
 
@@ -97,7 +95,7 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> findByLoginPassword(String login, String password) {
 
         Optional<User> result = Optional.empty();
-        try(PreparedStatement ps = connection.prepareCall(SqlQueryManager.getProperty("user.findByLoginPassword"))){
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("user.findByLoginPassword"))){
             ps.setString( 1, login);
             ps.setString( 2, password);
             ResultSet rs;
@@ -105,7 +103,7 @@ public class UserDaoImpl implements UserDao {
             UserMapper mapper = new UserMapper();
             if (rs.next()){
                 result = Optional.of(mapper.extractFromResultSet(rs));
-            }//TODO : ask question how avoid two users with the same name
+            }
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }

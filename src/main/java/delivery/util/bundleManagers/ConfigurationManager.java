@@ -1,4 +1,4 @@
-package delivery.controller.commands;
+package delivery.util.bundleManagers;
 
 import java.util.ResourceBundle;
 
