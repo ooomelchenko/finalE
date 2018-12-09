@@ -4,33 +4,30 @@ import delivery.controller.commands.ActionFactory;
 import delivery.controller.commands.Command;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+@WebServlet(urlPatterns = "/delivery/*")
 public class Servlet extends HttpServlet {
     //private final static Logger log = Logger.getLogger(Servlet.class);
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-     //   response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
-        request.setCharacterEncoding("UTF-8");
         processRequest(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-       // response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
-        request.setCharacterEncoding("UTF-8");
         processRequest(request, response);
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
        // log.debug("processRequest");
         String page ;
 

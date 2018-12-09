@@ -25,7 +25,7 @@ public class LoginCommand implements Command {
         }
 
         if( login == null || password == null){
-            return "WEB-INF/view/login.jsp";
+            return "/WEB-INF/view/login.jsp";
         }
 
         Optional<User> user = userService.login(login, password);
@@ -35,7 +35,7 @@ public class LoginCommand implements Command {
         }
         else {
             request.setAttribute("message", MessageManager.getProperty("login.wrongLoginData"));
-            return "WEB-INF/view/login.jsp";
+            return "/WEB-INF/view/login.jsp";
         }
     }
 }

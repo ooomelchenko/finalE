@@ -8,6 +8,6 @@ public class UserCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        return "WEB-INF/view/user/userMenu.jsp";
+        return "/WEB-INF/view/user/userMenu.jsp";
     }
 }

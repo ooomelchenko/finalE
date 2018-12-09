@@ -8,6 +8,6 @@ public class AdminCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        return "WEB-INF/view/admin/adminMenu.jsp";
+        return "/WEB-INF/view/admin/adminMenu.jsp";
     }
 }

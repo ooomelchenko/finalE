@@ -30,7 +30,7 @@
 
 
         <br/>
-        <a href="index.jsp">index</a>
+        <a href="../../index.jsp">index</a>
         <br/>
         <a href="${pageContext.request.contextPath}/WEB-INF/index.jsp">index</a>
     </body>

@@ -19,10 +19,10 @@ public class EmptyCommand implements Command {
     public String execute(HttpServletRequest request) {
 
         try {
-            return pathMap.getOrDefault(((User) request.getSession().getAttribute("user")).getRole().name(), "WEB-INF/view/index.jsp");
+            return pathMap.getOrDefault(((User) request.getSession().getAttribute("user")).getRole().name(), "/index.jsp");
         }
         catch (NullPointerException e){
-            return "WEB-INF/view/index.jsp";
+            return "/index.jsp";
         }
     }
 

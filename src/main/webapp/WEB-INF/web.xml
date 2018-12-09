@@ -1,15 +1,15 @@
 
 <web-app version="3.0">
   <display-name>Archetype Created Web Application</display-name>
-  <servlet>
+<!--  <servlet>
     <servlet-name>Servl</servlet-name>
     <servlet-class>delivery.controller.Servlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>Servl</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
+    <url-pattern>/delivery/*</url-pattern>
+  </servlet-mapping>-->
 
 <!--  <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

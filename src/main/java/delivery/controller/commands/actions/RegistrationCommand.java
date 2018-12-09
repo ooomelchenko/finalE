@@ -30,7 +30,7 @@ public class RegistrationCommand implements Command {
             request.setAttribute("enumRoles", Arrays.stream(User.Role.values())
                     .filter(r -> !r.name().equals("GUEST"))
                     .toArray());
-            return "WEB-INF/view/registration.jsp";
+            return "/WEB-INF/view/registration.jsp";
         }
 
         fieldsMap.put("login", login);
@@ -40,7 +40,6 @@ public class RegistrationCommand implements Command {
         fieldsMap.put("email", email);
 
         Map<String, String> wrongFields = userService.validateFields(fieldsMap);
-        System.out.println(wrongFields);
         if (wrongFields.isEmpty()) {
             userService.create(login, password, firstname, lastname, email, role);
             request.setAttribute("message", MessageManager.getProperty("registration.success"));
@@ -53,7 +52,7 @@ public class RegistrationCommand implements Command {
             request.setAttribute("enumRoles", Arrays.stream(User.Role.values())
                     .filter(r -> !r.name().equals("GUEST"))
                     .toArray());
-            return "WEB-INF/view/registration.jsp";
+            return "/WEB-INF/view/registration.jsp";
         }
 
     }

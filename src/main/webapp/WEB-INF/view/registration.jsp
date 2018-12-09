@@ -8,16 +8,16 @@
 <fmt:setBundle basename="content"/>
 
 <html lang="${sessionScope.lang}">
-<link href="resources/css/generalStyle.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/generalStyle.css" rel="stylesheet" type="text/css">
 <head>
     <title>Registration</title>
 </head>
 <body>
 <header>
     <div class="div_lang" style=" width: 30%">
-        <a href="?sessionLocale=en"><img src="resources/icons/gb.png"><fmt:message key="lang.en"/></a>
+        <a href="?sessionLocale=en"><img src="${pageContext.request.contextPath}/resources/icons/gb.png"><fmt:message key="lang.en"/></a>
         <br/>
-        <a href="?sessionLocale=ua"><img src="icons/ua.png"><fmt:message key="lang.ua"/></a>
+        <a href="?sessionLocale=ua"><img src="${pageContext.request.contextPath}/resources/icons/ua.png"><fmt:message key="lang.ua"/></a>
     </div>
 </header>
 
