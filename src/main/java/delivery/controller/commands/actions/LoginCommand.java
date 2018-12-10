@@ -34,7 +34,7 @@ public class LoginCommand implements Command {
             return CommandEnum.EMPTY.getCurrentCommand().execute(request);
         }
         else {
-            request.setAttribute("message", MessageManager.getProperty("login.wrongLoginData"));
+            request.setAttribute("message", MessageManager.getProperty("login.wrongLoginData", (String) request.getSession().getAttribute("lang")));
             return "/WEB-INF/view/login.jsp";
         }
     }

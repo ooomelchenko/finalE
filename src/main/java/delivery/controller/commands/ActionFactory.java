@@ -8,6 +8,8 @@ public class ActionFactory {
 
         String path = request.getRequestURI();
         path = path.replaceAll(".*/delivery/" , "");
+        path = path.replaceAll(".*/delivery" , "");
+
         System.out.println(path);
 
         if ( path.isEmpty()) {
