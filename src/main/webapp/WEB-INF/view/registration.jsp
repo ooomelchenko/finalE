@@ -82,7 +82,7 @@
         <div class="main-div">
             <div style="text-align: right" id="lang-div">
                 <a href="?sessionLocale=en"><img src="${pageContext.request.contextPath}/resources/icons/gb.png"><fmt:message key="lang.en"/></a>
-
+                <br>
                 <a href="?sessionLocale=ua"><img src="${pageContext.request.contextPath}/resources/icons/ua.png"><fmt:message key="lang.ua"/></a>
             </div>
 

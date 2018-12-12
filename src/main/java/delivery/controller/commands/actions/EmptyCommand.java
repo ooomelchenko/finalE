@@ -1,29 +1,27 @@
 package delivery.controller.commands.actions;
 
 import delivery.controller.commands.Command;
-import delivery.model.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class EmptyCommand implements Command {
 
-    private Map<String, String> pathMap = new ConcurrentHashMap<>();
+/*    private Map<String, String> pathMap = new ConcurrentHashMap<>();
     {
-        pathMap.put(User.Role.USER.name(), "user:redirect");
-        pathMap.put(User.Role.ADMIN.name(), "admin:redirect");
-    }
+        pathMap.put(User.Role.USER.name(), "delivery/user:redirect");
+        pathMap.put(User.Role.ADMIN.name(), "delivery/admin:redirect");
+    }*/
 
     @Override
     public String execute(HttpServletRequest request) {
 
-        try {
-            return pathMap.getOrDefault(((User) request.getSession().getAttribute("user")).getRole().name(), "/index.jsp");
+    /*    try {
+            return pathMap.getOrDefault(((User) request.getSession().getAttribute("user")).getRole().name(), "/WEB-INF/view/home.jsp");
         }
         catch (NullPointerException e){
-            return "/index.jsp";
-        }
+            return "/WEB-INF/view/home.jsp";
+        }*/
+        return "/WEB-INF/view/home.jsp";
     }
 
 }

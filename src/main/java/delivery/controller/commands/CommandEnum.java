@@ -5,15 +5,18 @@ import delivery.exceptions.WrongCommandException;
 
 public enum CommandEnum {
 
+    HOME ("HOME", new HomeCommand()) {},
     EMPTY ("EMPTY", new EmptyCommand()) {},
  //   GUEST ("GUEST", new GuestCommand()) {},
     LOGIN ("LOGIN", new LoginCommand()) {},
     REGISTRATION("REGISTRATION", new RegistrationCommand()){},
+    LOGOUT ("LOGOUT", new LogoutCommand()) {},
     REGISTRATIONVALID("REGISTRATIONVALID", new RegistrationValidCommand()){},
     USER ("USER", new UserCommand()) {},
     ADMIN ("ADMIN", new AdminCommand()) {};
+
     /*
-    LOGOUT ("ADMIN", new AdminCommand()) {},
+
     SORTBYPRICE ("ADMIN", new AdminCommand()) {},
     FILTERORDERS ("ADMIN", new AdminCommand()){};
     */

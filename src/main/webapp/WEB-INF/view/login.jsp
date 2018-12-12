@@ -81,7 +81,11 @@
 
             </form>
 
-                <p class="text-danger"> <c:out value="${requestScope.message}"/> </p>
+            <p class="text-danger"> <c:out value="${requestScope.message}"/></p>
+            <a href="${pageContext.request.contextPath}/delivery/registration" style=" text-align: right">
+                <img src="${pageContext.request.contextPath}/resources/icons/registration.png" style="width: 30px; height: 30px">
+                <fmt:message key="registration.head"/>
+            </a>
 
         </div>
 
