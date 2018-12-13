@@ -10,8 +10,6 @@ public class ActionFactory {
         path = path.replaceAll(".*/delivery/" , "");
         path = path.replaceAll(".*/delivery" , "");
 
-        System.out.println(path);
-
         if ( path.isEmpty()) {
             return CommandEnum.EMPTY.getCurrentCommand();
         }

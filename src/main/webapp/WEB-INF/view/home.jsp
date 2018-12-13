@@ -57,6 +57,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="#"><fmt:message key="nav.tariffs"/></a>
             </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><fmt:message key="nav.calculator"/></a>
+                </li>
             <li class="nav-item">
                 <a class="nav-link" href="#"><fmt:message key="nav.about"/></a>
             </li>

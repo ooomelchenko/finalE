@@ -5,15 +5,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class MessageManager {
+public class ContentManager {
     private static final Map<String, ResourceBundle> bundleMap = new HashMap<>();
     static {
-        bundleMap.put("ua", ResourceBundle.getBundle("messages", new Locale("ua")));
-        bundleMap.put("en", ResourceBundle.getBundle("messages", Locale.ENGLISH));
-        bundleMap.put(null, ResourceBundle.getBundle("messages"));
+        bundleMap.put("ua", ResourceBundle.getBundle("content", new Locale("ua")));
+        bundleMap.put("en", ResourceBundle.getBundle("content", Locale.ENGLISH));
+        bundleMap.put(null, ResourceBundle.getBundle("content"));
     }
 
-       private MessageManager() { }
+       private ContentManager() { }
     public static String getProperty(String key) {
         return bundleMap.get(null).getString(key);
     }

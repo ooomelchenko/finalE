@@ -2,10 +2,10 @@ package delivery.controller.commands.actions;
 
 import delivery.controller.commands.Command;
 import delivery.controller.commands.CommandEnum;
-import delivery.util.bundleManagers.MessageManager;
 import delivery.model.entity.User;
 import delivery.model.service.UserService;
 import delivery.model.service.UserServiceImpl;
+import delivery.util.bundleManagers.ContentManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -31,10 +31,10 @@ public class LoginCommand implements Command {
         Optional<User> user = userService.login(login, password);
         if(user.isPresent()){
             request.getSession().setAttribute("user", user.get());
-            return CommandEnum.EMPTY.getCurrentCommand().execute(request);
+            return "home:redirect";
         }
         else {
-            request.setAttribute("message", MessageManager.getProperty("login.wrongLoginData", (String) request.getSession().getAttribute("lang")));
+            request.setAttribute("message", ContentManager.getProperty("login.wrongLoginData", (String) request.getSession().getAttribute("lang")));
             return "/WEB-INF/view/login.jsp";
         }
     }

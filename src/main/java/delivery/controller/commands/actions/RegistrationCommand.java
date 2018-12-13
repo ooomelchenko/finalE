@@ -4,7 +4,7 @@ import delivery.controller.commands.Command;
 import delivery.model.entity.User;
 import delivery.model.service.UserService;
 import delivery.model.service.UserServiceImpl;
-import delivery.util.bundleManagers.MessageManager;
+import delivery.util.bundleManagers.ContentManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -44,11 +44,11 @@ public class RegistrationCommand implements Command {
         Map<String, String> wrongFields = userService.validateFields(fieldsMap);
         if (wrongFields.isEmpty()) {
             userService.create(login, password, firstname, lastname, email, role);
-            request.setAttribute("message", MessageManager.getProperty("registration.success", lang));
+            request.setAttribute("message", ContentManager.getProperty("registration.success", lang));
             return "login:redirect";
         } else {
             for (String field : wrongFields.keySet()) {
-                request.setAttribute("wrong_"+field, MessageManager.getProperty("wrong."+field, lang));
+                request.setAttribute("wrong_"+field, ContentManager.getProperty("wrong."+field, lang));
             }
             request.setAttribute("userDTO", new User(login, password, firstname, lastname, email, User.Role.valueOf(role)));
             request.setAttribute("enumRoles", Arrays.stream(User.Role.values())
