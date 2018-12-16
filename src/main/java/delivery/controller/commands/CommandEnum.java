@@ -13,7 +13,11 @@ public enum CommandEnum {
     LOGOUT ("LOGOUT", new LogoutCommand()) {},
     REGISTRATIONVALID("REGISTRATIONVALID", new RegistrationValidCommand()){},
     USER ("USER", new UserCommand()) {},
-    ADMIN ("ADMIN", new AdminCommand()) {};
+    ADMIN ("ADMIN", new AdminCommand()) {},
+    ROUTES ("ROUTES", new RoutesCommand()) {},
+    TARIFFS ("TARIFFS", new TariffsCommand()) {},
+    CALCULATOR ("CALCULATOR", new CalculatorCommand()) {},
+    CALCULATE ("CALCULATE", new CalculateDeliveryPriceCommand()) {};
 
     /*
 
