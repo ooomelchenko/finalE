@@ -12,7 +12,21 @@ public class FactoryDaoAbst extends DaoFactoryAbst {
     public UserDao createUserDao() {
         return new UserDaoImpl(getConnection());
     }
+    @Override
+    public RouteDao createRouteDao() {
+        return new RouteDaoImpl(getConnection());
+    }
 
+    @Override
+    public TariffDao createTariffDao() {
+        return new TariffDaoImpl(getConnection());
+    }
+
+    @Override
+    public OrderDao createOrderDao() {
+        return new OrderDaoImpl(getConnection());
+    }
+    
     private Connection getConnection(){
         try {
             return dataSource.getConnection();

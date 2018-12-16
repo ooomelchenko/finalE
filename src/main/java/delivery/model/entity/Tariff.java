@@ -5,6 +5,7 @@ public class Tariff {
     private long id;
     private String name;
     private long costPerKm;
+    private long costPerKg;
 
     public Tariff() {
     }
@@ -30,4 +31,10 @@ public class Tariff {
         this.costPerKm = costPerKm;
     }
 
+    public long getCostPerKg() {
+        return costPerKg;
+    }
+    public void setCostPerKg(long costPerKg) {
+        this.costPerKg = costPerKg;
+    }
 }

@@ -34,7 +34,7 @@ public class TariffDaoImpl implements TariffDao {
         List<Tariff> tariffList = new ArrayList<>();
         TariffMapper tariffMapper = new TariffMapper();
 
-        final String query = "select * from orders";
+        final String query = "select * from tariffs";
 
         try (Statement st = connection.createStatement()) {
 
@@ -62,6 +62,10 @@ public class TariffDaoImpl implements TariffDao {
 
     @Override
     public void close() {
-
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

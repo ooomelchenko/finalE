@@ -34,7 +34,7 @@ public class RouteDaoImpl implements RouteDao {
         List<Route> routeList = new ArrayList<>();
         RouteMapper routeMapper = new RouteMapper();
 
-        final String query = "select * from orders";
+        final String query = "select * from routes";
 
         try (Statement st = connection.createStatement()) {
 
@@ -62,6 +62,10 @@ public class RouteDaoImpl implements RouteDao {
 
     @Override
     public void close() {
-
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
