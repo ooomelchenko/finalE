@@ -7,6 +7,7 @@ import delivery.model.service.UserServiceImpl;
 import delivery.util.bundleManagers.ContentManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +18,7 @@ public class RegistrationCommand implements Command {
     private Map<String, String > fieldsMap = new ConcurrentHashMap<>();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
         String login = request.getParameter("login");
         String password = request.getParameter("password");

@@ -1,7 +1,6 @@
 package delivery.model.service;
 
 import delivery.model.dao.DaoFactoryAbst;
-import delivery.model.dao.FactoryDaoAbst;
 import delivery.model.dao.TariffDao;
 import delivery.model.entity.Tariff;
 
@@ -10,7 +9,7 @@ import java.util.Optional;
 
 public class TariffServiceImpl implements TariffService {
 
-    private DaoFactoryAbst daoFactoryAbst = FactoryDaoAbst.getInstance();
+    private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();
 
     @Override
     public List<Tariff> getAllTariffs() {
@@ -21,7 +20,9 @@ public class TariffServiceImpl implements TariffService {
 
     @Override
     public Optional<Tariff> getTariff(long id) {
-        return Optional.empty();
+        try (TariffDao dao = daoFactoryAbst.createTariffDao()) {
+            return Optional.ofNullable(dao.findById(id));
+        }
     }
 
     @Override

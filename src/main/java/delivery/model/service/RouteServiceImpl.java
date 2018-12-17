@@ -1,15 +1,15 @@
 package delivery.model.service;
 
 import delivery.model.dao.DaoFactoryAbst;
-import delivery.model.dao.FactoryDaoAbst;
 import delivery.model.dao.RouteDao;
 import delivery.model.entity.Route;
+
 import java.util.List;
 import java.util.Optional;
 
 public class RouteServiceImpl implements RouteService {
 
-    private DaoFactoryAbst daoFactoryAbst = FactoryDaoAbst.getInstance();
+    private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();
 
     @Override
     public List<Route> getAllRoutes() {
@@ -20,7 +20,9 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public Optional<Route> getRoute(long id) {
-        return Optional.empty();
+        try (RouteDao dao = daoFactoryAbst.createRouteDao()) {
+            return Optional.ofNullable(dao.findById(id));
+        }
     }
 
     @Override

@@ -88,8 +88,8 @@
         <c:forEach var="tariff" items="${sessionScope.tariffList}">
             <tr class="table-p">
                 <td><c:out value="${tariff.name} "/></td>
-                <td><c:out value="${tariff.costPerKm} "/></td>
-                <td><c:out value="${tariff.costPerKg} "/></td>
+                <td><c:out value="${tariff.costPerKm/100} "/></td>
+                <td><c:out value="${tariff.costPerKg/100} "/></td>
             </tr>
         </c:forEach>
         </tbody>

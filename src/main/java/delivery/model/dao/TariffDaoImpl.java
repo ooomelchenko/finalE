@@ -2,11 +2,9 @@ package delivery.model.dao;
 
 import delivery.model.dao.mapper.TariffMapper;
 import delivery.model.entity.Tariff;
+import delivery.util.bundleManagers.SqlQueryManager;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,21 @@ public class TariffDaoImpl implements TariffDao {
 
     @Override
     public Tariff findById(long id) {
-        return null;
+
+        TariffMapper tariffMapper = new TariffMapper();
+
+        try (PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("tariff.findById"))) {
+
+            st.setLong(1, id);
+
+            ResultSet rs = st.executeQuery();
+            rs.next();
+
+            return tariffMapper.extractFromResultSet(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -34,11 +46,9 @@ public class TariffDaoImpl implements TariffDao {
         List<Tariff> tariffList = new ArrayList<>();
         TariffMapper tariffMapper = new TariffMapper();
 
-        final String query = "select * from tariffs";
-
         try (Statement st = connection.createStatement()) {
 
-            ResultSet rs = st.executeQuery(query);
+            ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("tariff.findAll"));
 
             while (rs.next()) {
                 tariffList.add(tariffMapper.extractFromResultSet(rs));

@@ -33,7 +33,7 @@ public class Servlet extends HttpServlet {
 
         ActionFactory client = new ActionFactory();
         Command command = client.defineCommand(request);
-        page = command.execute(request);
+        page = command.execute(request, response);
 // метод возвращает страницу ответа
         if (page != null) {
             if(page.contains("redirect")){

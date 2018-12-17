@@ -8,6 +8,7 @@ import delivery.model.service.UserServiceImpl;
 import delivery.util.bundleManagers.ContentManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 public class LoginCommand implements Command {
@@ -15,13 +16,13 @@ public class LoginCommand implements Command {
     private UserService userService = new UserServiceImpl();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public String execute(HttpServletRequest request, HttpServletResponse response ) {
 
         String login = request.getParameter("login");
         String password = request.getParameter("password");
 
         if(request.getSession().getAttribute("user")!=null){
-            return CommandEnum.EMPTY.getCurrentCommand().execute(request);
+            return CommandEnum.EMPTY.getCurrentCommand().execute(request, response);
         }
 
         if( login == null || password == null){

@@ -4,7 +4,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class FactoryDaoAbst extends DaoFactoryAbst {
+public class FactoryDao extends DaoFactoryAbst {
 
     private DataSource dataSource = ConnectionPoolHolder.getDataSource();
 
@@ -16,12 +16,10 @@ public class FactoryDaoAbst extends DaoFactoryAbst {
     public RouteDao createRouteDao() {
         return new RouteDaoImpl(getConnection());
     }
-
     @Override
     public TariffDao createTariffDao() {
         return new TariffDaoImpl(getConnection());
     }
-
     @Override
     public OrderDao createOrderDao() {
         return new OrderDaoImpl(getConnection());

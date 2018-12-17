@@ -2,11 +2,9 @@ package delivery.model.dao;
 
 import delivery.model.dao.mapper.RouteMapper;
 import delivery.model.entity.Route;
+import delivery.util.bundleManagers.SqlQueryManager;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,22 @@ public class RouteDaoImpl implements RouteDao {
 
     @Override
     public Route findById(long id) {
-        return null;
+
+        RouteMapper routeMapper = new RouteMapper();
+
+        try (PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("route.findById"))) {
+
+            st.setLong(1, id);
+
+            ResultSet rs = st.executeQuery();
+            rs.next();
+
+            return routeMapper.extractFromResultSet(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
@@ -34,11 +47,9 @@ public class RouteDaoImpl implements RouteDao {
         List<Route> routeList = new ArrayList<>();
         RouteMapper routeMapper = new RouteMapper();
 
-        final String query = "select * from routes";
-
         try (Statement st = connection.createStatement()) {
 
-            ResultSet rs = st.executeQuery(query);
+            ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("route.findAll"));
 
             while (rs.next()) {
                 routeList.add(routeMapper.extractFromResultSet(rs));

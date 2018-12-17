@@ -12,7 +12,7 @@ public abstract class DaoFactoryAbst {
         if( daoFactoryAbst == null ){
             synchronized (DaoFactoryAbst.class){
                 if(daoFactoryAbst ==null){
-                    daoFactoryAbst = new FactoryDaoAbst();
+                    daoFactoryAbst = new FactoryDao();
                 }
             }
         }
