@@ -3,16 +3,24 @@ package delivery.controller;
 import delivery.controller.commands.ActionFactory;
 import delivery.controller.commands.Command;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
 
 @WebServlet(urlPatterns = "/delivery/*")
 public class Servlet extends HttpServlet {
     //private final static Logger log = Logger.getLogger(Servlet.class);
+
+
+    @Override
+    public void init(ServletConfig servletConfig) throws ServletException {
+        servletConfig.getServletContext().setAttribute("loggedUsers", new HashSet<String>());
+    }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {

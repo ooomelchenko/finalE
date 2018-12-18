@@ -2,7 +2,7 @@ package delivery.controller.commands.actions;
 
 import com.google.gson.JsonObject;
 import delivery.controller.commands.Command;
-import delivery.exceptions.WrongCommandException;
+import delivery.controller.exceptions.WrongCommandException;
 import delivery.model.entity.Route;
 import delivery.model.entity.Tariff;
 import delivery.model.service.RouteService;

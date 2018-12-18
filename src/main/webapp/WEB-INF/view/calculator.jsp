@@ -84,8 +84,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/"><fmt:message key="nav.home"/></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -97,39 +96,35 @@
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/delivery/tariffs"><fmt:message key="nav.tariffs"/></a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="${pageContext.request.contextPath}/delivery/calculator"><fmt:message key="nav.calculator"/></a>
-            </li>
             <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/delivery/about"><fmt:message key="nav.about"/></a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/delivery/calculator"><fmt:message key="nav.calculator"/></a>
             </li>
         </ul>
         <div>
 
             <c:if test="${sessionScope.user == null}">
                 <a href="${pageContext.request.contextPath}/delivery/login">
-                    <fmt:message key="input.login"/> <img
-                        src="${pageContext.request.contextPath}/resources/icons/login.png"
-                        style="width: 40px; height: 40px">
+                    <fmt:message key="input.login"/> <img src="${pageContext.request.contextPath}/resources/icons/login.png" style="width: 40px; height: 40px">
                 </a>
 
             </c:if>
             <c:if test="${sessionScope.user != null}">
-                <a href="${pageContext.request.contextPath}/delivery/logout">
-                    <fmt:message key="logout.head"/> <img
-                        src="${pageContext.request.contextPath}/resources/icons/logout.png"
-                        style="width: 40px; height: 40px">
-                </a>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true"><img src="${pageContext.request.contextPath}/resources/icons/logout.png" style="width: 40px; height: 40px"></a>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 30px, 0px);">
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/delivery/profile">${sessionScope.user.login}</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/delivery/logout"><fmt:message key="logout.head"/></a>
+                    </div>
+                </div>
             </c:if>
 
         </div>
 
         <div style="text-align: right" id="lang-div">
-            <a href="?sessionLocale=en"><img
-                    src="${pageContext.request.contextPath}/resources/icons/gb.png"><fmt:message key="lang.en"/></a>
+            <a href="?sessionLocale=en"><img src="${pageContext.request.contextPath}/resources/icons/gb.png"><fmt:message key="lang.en"/></a>
             <br>
-            <a href="?sessionLocale=ua"><img
-                    src="${pageContext.request.contextPath}/resources/icons/ua.png"><fmt:message key="lang.ua"/></a>
+            <a href="?sessionLocale=ua"><img src="${pageContext.request.contextPath}/resources/icons/ua.png"><fmt:message key="lang.ua"/></a>
         </div>
     </div>
 </nav>

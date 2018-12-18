@@ -1,4 +1,4 @@
-package delivery.exceptions;
+package delivery.controller.exceptions;
 
 public class RoleAccessDeniedCommandException extends RuntimeException {
     public RoleAccessDeniedCommandException(){

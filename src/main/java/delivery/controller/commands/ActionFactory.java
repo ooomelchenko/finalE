@@ -7,6 +7,9 @@ public class ActionFactory {
     public Command defineCommand(HttpServletRequest request) {
 
         String path = request.getRequestURI();
+
+        System.out.println(path);
+
         path = path.replaceAll(".*/delivery/" , "");
         path = path.replaceAll(".*/delivery" , "");
 

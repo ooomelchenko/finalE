@@ -1,6 +1,6 @@
-package delivery.filter;
+package delivery.controller.filter;
 
-import delivery.exceptions.RoleAccessDeniedCommandException;
+import delivery.controller.exceptions.RoleAccessDeniedCommandException;
 import delivery.model.entity.User;
 
 import javax.servlet.*;
@@ -8,12 +8,11 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@WebFilter(filterName = "AdminAccessFilter", urlPatterns = {"/delivery/admin/*"})
-public class AdminAccessFilter implements Filter {
+@WebFilter(filterName = "UserAccessFilter", urlPatterns = {"/delivery/user/*"})
+public class UserAccessFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override
@@ -25,7 +24,7 @@ public class AdminAccessFilter implements Filter {
 
         User user = (User) request.getSession().getAttribute("user");
 
-        if (user != null && user.getRole().name().equals(User.Role.ADMIN.name())) {
+        if (user != null && user.getRole().name().equals(User.Role.USER.name())) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             throw new RoleAccessDeniedCommandException(path);
@@ -34,6 +33,5 @@ public class AdminAccessFilter implements Filter {
 
     @Override
     public void destroy() {
-
     }
 }

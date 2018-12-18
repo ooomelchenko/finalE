@@ -1,4 +1,4 @@
-package delivery.exceptions;
+package delivery.controller.exceptions;
 
 public class WrongCommandException extends RuntimeException {
     public WrongCommandException(){

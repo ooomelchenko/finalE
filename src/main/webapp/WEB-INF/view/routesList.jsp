@@ -35,7 +35,7 @@
 
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/delivery/routes"><fmt:message key="nav.routes"/></a>
             </li>
             <li class="nav-item">
@@ -43,9 +43,6 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/delivery/calculator"><fmt:message key="nav.calculator"/></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/delivery/about"><fmt:message key="nav.about"/></a>
             </li>
         </ul>
         <div>
@@ -57,9 +54,14 @@
 
             </c:if>
             <c:if test="${sessionScope.user != null}">
-                <a href="${pageContext.request.contextPath}/delivery/logout">
-                    <fmt:message key="logout.head"/> <img src="${pageContext.request.contextPath}/resources/icons/logout.png" style="width: 40px; height: 40px">
-                </a>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true"><img src="${pageContext.request.contextPath}/resources/icons/logout.png" style="width: 40px; height: 40px"></a>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 30px, 0px);">
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/delivery/profile">${sessionScope.user.login}</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/delivery/logout"><fmt:message key="logout.head"/></a>
+                    </div>
+                </div>
             </c:if>
 
         </div>
@@ -71,6 +73,7 @@
         </div>
     </div>
 </nav>
+
 <div class="jumbotron">
     <table class="table table-hover">
         <thead>

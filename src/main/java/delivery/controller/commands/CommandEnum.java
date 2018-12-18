@@ -1,11 +1,11 @@
 package delivery.controller.commands;
 
 import delivery.controller.commands.actions.*;
-import delivery.exceptions.WrongCommandException;
+import delivery.controller.exceptions.WrongCommandException;
 
 public enum CommandEnum {
 
-    HOME ("HOME", new HomeCommand()) {},
+    PROFILE ("PROFILE", new ProfileCommand()) {},
     EMPTY ("EMPTY", new EmptyCommand()) {},
  //   GUEST ("GUEST", new GuestCommand()) {},
     LOGIN ("LOGIN", new LoginCommand()) {},
