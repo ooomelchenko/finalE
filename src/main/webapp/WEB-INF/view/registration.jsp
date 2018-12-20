@@ -107,7 +107,8 @@
                 </div>
 
                 <div class="form-group">
-                    <input class="form-control" name="login" type="text" value="${requestScope.userDTO.getLogin()}"
+                    <input class="form-control" name="login" type="text"
+                           value="${requestScope.userDTO.getLogin()}"
                            placeholder="<fmt:message key="input.login"/>"/>
                     <p class="text-danger">${requestScope.wrong_login}</p>
                 </div>
@@ -136,8 +137,7 @@
                 <div class="form-group">
                     <input class="form-control" name="email" type="email"
                            value="${requestScope.userDTO.getEmail()}"
-                           placeholder="<fmt:message key="input.email"/>"
-                           />
+                           placeholder="<fmt:message key="input.email"/>"/>
                     <p class="text-danger">${requestScope.wrong_email}</p>
                 </div>
 

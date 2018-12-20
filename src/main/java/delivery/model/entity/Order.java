@@ -1,13 +1,13 @@
 package delivery.model.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Order {
 
     private long id;
     private Type type;
     private int weight;
-    private Date arrivalDate;
+    private LocalDate arrivalDate;
     private AvailableOption availableOption;
     private Bill bill;
 
@@ -37,10 +37,10 @@ public class Order {
         this.weight = weight;
     }
 
-    public Date getArrivalDate() {
+    public LocalDate getArrivalDate() {
         return arrivalDate;
     }
-    public void setArrivalDate(Date arrivalDate) {
+    public void setArrivalDate(LocalDate arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
 

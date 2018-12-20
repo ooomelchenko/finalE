@@ -5,23 +5,19 @@ import delivery.controller.commands.Command;
 import delivery.controller.exceptions.WrongCommandException;
 import delivery.model.entity.Route;
 import delivery.model.entity.Tariff;
-import delivery.model.service.RouteService;
-import delivery.model.service.RouteServiceImpl;
-import delivery.model.service.TariffService;
-import delivery.model.service.TariffServiceImpl;
+import delivery.model.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class CalculateDeliveryPriceCommand implements Command {
 
     private RouteService routeService = new RouteServiceImpl();
     private TariffService tariffService = new TariffServiceImpl();
+    private CalculatorService calculatorService = new CalculatorServiceImpl();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws WrongCommandException {
@@ -32,21 +28,18 @@ public class CalculateDeliveryPriceCommand implements Command {
 
         Optional<Route> optionalRoute = routeService.getRoute(Long.parseLong(routeId));
         Optional<Tariff> optionalTariff = tariffService.getTariff(Long.parseLong(tariffId));
-        Long weight =  Long.valueOf(weightGr);
+        Integer weight =  Integer.valueOf(weightGr);
 
         Tariff tariff = optionalTariff.get();
         Route route = optionalRoute.get();
 
-        Long price = (tariff.getCostPerKg()*weight)/1000 + route.getDistanceKm()*tariff.getCostPerKm();
-
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Long price = calculatorService.getDeliveryPrice(tariff, route, weight);
+        LocalDate deliveryDate = calculatorService.getDeliveryDate(tariff, route);
 
         response.setContentType("application/json");
-
         JsonObject calculationJsonResults = new JsonObject();
 
-        calculationJsonResults.addProperty("arrivalDate", sdf.format(new Date()));
+        calculationJsonResults.addProperty("arrivalDate", deliveryDate.toString());
         calculationJsonResults.addProperty("deliveryPrice", price);
 
         try (PrintWriter writer = response.getWriter()) {

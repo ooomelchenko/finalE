@@ -9,58 +9,8 @@
 <html>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/resources/js/orderCalcuator.js" type="text/javascript"></script>
 
-<script>
-    $(document).ready(function () {
-        $('#div_calc_res').hide();
-
-        var orderType = $('#orderType');
-        var routeId = $('#routeId');
-        var tariffId = $('#tariffId');
-        var inputWeight = $('#inputWeight');
-
-        function isValidFieldset() {
-            if(orderType.val()!=null && routeId.val()!=null && tariffId.val()!=null && inputWeight.val()>0)
-                return true;
-        }
-
-        function getPrice_Date(){
-            $.ajax({
-                url: "${pageContext.request.contextPath}/delivery/calculate",
-                method: "POST",
-                data: {orderType: orderType.val(),
-                    tariffId: tariffId.val(),
-                    routeId: routeId.val(),
-                    weight: inputWeight.val()*1000
-                },
-                dataType: "json",
-                success: function (calculationJsonResults) {
-
-                    $('#td_delivery_date').text(calculationJsonResults.arrivalDate);
-                    $('#td_delivery_price').text(calculationJsonResults.deliveryPrice/100);
-
-            },
-            error: function () {
-                $('#td_delivery_price').text("<fmt:message key="message.wrongaction"/>");
-            }
-
-        });
-        }
-
-        $('#button_send').click( function(){
-            if(isValidFieldset()){
-                $('#div_calc_res').show();
-                $('#h_calc').hide();
-                getPrice_Date();
-            }
-            else{
-                alert('<fmt:message key="wrong.form.fieldset"/>');
-            }
-
-        });
-
-    })
-</script>
 
 <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
       type="text/css">
@@ -96,7 +46,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/delivery/tariffs"><fmt:message key="nav.tariffs"/></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="${pageContext.request.contextPath}/delivery/calculator"><fmt:message key="nav.calculator"/></a>
             </li>
         </ul>
@@ -195,6 +145,24 @@
         <div class="jumbotron col-5">
         </div>
         <div class="jumbotron col-4">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col"><fmt:message key="tariff.table.head.name"/></th>
+                    <th scope="col"><fmt:message key="tariff.table.head.costPerKm"/></th>
+                    <th scope="col"><fmt:message key="tariff.table.head.costPerKg"/></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="tariff" items="${sessionScope.tariffList}">
+                    <tr class="table-p">
+                        <td><c:out value="${tariff.name} "/></td>
+                        <td><c:out value="${tariff.costPerKm/100} "/></td>
+                        <td><c:out value="${tariff.costPerKg/100} "/></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
         </div>
 
     </div>
