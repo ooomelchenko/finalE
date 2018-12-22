@@ -28,7 +28,6 @@ $(document).ready(function () {
 
             },
             error: function () {
-                $('#td_delivery_price').text("<fmt:message key="message.wrongaction"/>");
             }
 
         });

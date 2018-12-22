@@ -1,11 +1,15 @@
 package delivery.model.entity;
 
+import java.util.List;
+
 public class Route {
 
     private long id;
     private String routeStart;
     private String routeEnd;
-    private long distanceKm;
+    private int distanceKm;
+
+    private List<Tariff> tariffList;
 
     public Route() {
     }
@@ -31,11 +35,17 @@ public class Route {
         this.routeEnd = routeEnd;
     }
 
-    public long getDistanceKm() {
+    public int getDistanceKm() {
         return distanceKm;
     }
-    public void setDistanceKm(long distanceKm) {
+    public void setDistanceKm(int distanceKm) {
         this.distanceKm = distanceKm;
     }
 
+    public List<Tariff> getTariffList() {
+        return tariffList;
+    }
+    public void setTariffList(List<Tariff> tariffList) {
+        this.tariffList = tariffList;
+    }
 }

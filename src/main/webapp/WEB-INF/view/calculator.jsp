@@ -9,8 +9,8 @@
 <html>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
-<script src="${pageContext.request.contextPath}/resources/js/orderCalcuator.js" type="text/javascript"></script>
 
+<script src="${pageContext.request.contextPath}/resources/js/orderCalcuator.js" type="text/javascript"></script>
 
 <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
       type="text/css">
@@ -105,7 +105,7 @@
                     <div class="form-group">
                         <label for="orderType" class="col-sm-2 col-form-label"><fmt:message key="calculator.fieldset.orderType"/></label>
                         <select class="custom-select" id="orderType">
-                            <c:forEach var="orderType" items="${sessionScope.orderTypes}">
+                            <c:forEach var="orderType" items="${requestScope.orderTypes}">
                                 <option value="${orderType.name()}">
                                         ${orderType.name()}
                                 </option>
@@ -115,7 +115,7 @@
                     <div class="form-group">
                         <label for="routeId" class="col-sm-2 col-form-label"><fmt:message key="calculator.fieldset.route"/></label>
                         <select class="custom-select" id="routeId">
-                            <c:forEach var="route" items="${sessionScope.routeList}">
+                            <c:forEach var="route" items="${requestScope.routeList}">
                                 <option value="${route.id}">
                                         ${route.routeStart}-${route.routeEnd}
                                 </option>
@@ -125,7 +125,7 @@
                     <div class="form-group">
                         <label for="tariffId" class="col-sm-2 col-form-label"><fmt:message key="calculator.fieldset.tariff"/></label>
                         <select class="custom-select" id="tariffId">
-                            <c:forEach var="tariff" items="${sessionScope.tariffList}">
+                            <c:forEach var="tariff" items="${requestScope.tariffList}">
                                 <option value="${tariff.id}">
                                         ${tariff.name}
                                 </option>
@@ -140,7 +140,6 @@
                     <button id="button_send" type="button" class="btn btn-primary"><fmt:message key="button.calculate"/></button>
                 </fieldset>
 
-
         </div>
         <div class="jumbotron col-5">
         </div>
@@ -154,7 +153,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="tariff" items="${sessionScope.tariffList}">
+                <c:forEach var="tariff" items="${requestScope.tariffList}">
                     <tr class="table-p">
                         <td><c:out value="${tariff.name} "/></td>
                         <td><c:out value="${tariff.costPerKm/100} "/></td>

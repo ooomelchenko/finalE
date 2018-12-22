@@ -1,11 +1,16 @@
 package delivery.model.entity;
 
+import java.util.List;
+
 public class Tariff {
 
     private long id;
     private String name;
     private long costPerKm;
     private long costPerKg;
+    private int paceDayKm;
+
+    private List<Route> routeList;
 
     public Tariff() {
     }
@@ -36,5 +41,19 @@ public class Tariff {
     }
     public void setCostPerKg(long costPerKg) {
         this.costPerKg = costPerKg;
+    }
+
+    public int getPaceDayKm() {
+        return paceDayKm;
+    }
+    public void setPaceDayKm(int paceDayKm) {
+        this.paceDayKm = paceDayKm;
+    }
+
+    public List<Route> getRouteList() {
+        return routeList;
+    }
+    public void setRouteList(List<Route> routeList) {
+        this.routeList = routeList;
     }
 }

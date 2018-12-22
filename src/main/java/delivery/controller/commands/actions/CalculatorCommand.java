@@ -18,9 +18,9 @@ public class CalculatorCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-        request.getSession().setAttribute("tariffList", tariffService.getAllTariffs());
-        request.getSession().setAttribute("routeList", routeService.getAllRoutes());
-        request.getSession().setAttribute("orderTypes", Order.Type.values());
+        request.setAttribute("orderTypes", Order.Type.values());
+        request.setAttribute("routeList", routeService.getAllRoutes());
+        request.setAttribute("tariffList", tariffService.getAllTariffs());
 
         return "/WEB-INF/view/calculator.jsp";
     }

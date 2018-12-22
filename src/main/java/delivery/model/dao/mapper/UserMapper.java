@@ -10,7 +10,7 @@ public class UserMapper implements ObjectMapper<User> {
     @Override
     public User extractFromResultSet(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setId(rs.getLong("id"));
+        user.setId(rs.getLong("id_user"));
         user.setLogin(rs.getString("login"));
         user.setPassword(rs.getString("password"));
         user.setFirstName(rs.getString("firstName"));

@@ -1,4 +1,6 @@
 package delivery.model.dao;
 
-public interface OrderDao extends GenericDao {
+import delivery.model.entity.Order;
+
+public interface OrderDao extends GenericDao<Order> {
 }

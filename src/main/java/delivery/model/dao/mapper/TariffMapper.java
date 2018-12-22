@@ -11,10 +11,11 @@ public class TariffMapper implements ObjectMapper<Tariff> {
 
         Tariff tariff = new Tariff();
 
-        tariff.setId(rs.getLong("id"));
+        tariff.setId(rs.getLong("id_tariff"));
         tariff.setName(rs.getString("name"));
         tariff.setCostPerKm(rs.getLong("cost_per_km"));
         tariff.setCostPerKg(rs.getLong("cost_per_kg"));
+        tariff.setPaceDayKm(rs.getInt("pace_day_km"));
 
         return tariff;
 

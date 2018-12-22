@@ -1,12 +1,13 @@
 package delivery.model.dao;
 
-import delivery.util.bundleManagers.SqlQueryManager;
+import delivery.model.dao.mapper.OrderMapper;
 import delivery.model.dao.mapper.UserMapper;
+import delivery.model.entity.Order;
 import delivery.model.entity.User;
+import delivery.util.bundleManagers.SqlQueryManager;
 
 import java.sql.*;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class UserDaoImpl implements UserDao {
 
@@ -40,36 +41,33 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAll() {
-        /*Map<Integer, User> users = new HashMap<>();
-        Map<Integer, Order> orders = new HashMap<>();
+        Map<Long, User> userMap = new HashMap<>();
+        Map<Long, Order> orderMap = new HashMap<>();
 
-        final String query = "" +
-                " select * from users" +
-                " left join studen_has_user using (idstuden)" +
-                " left join user using (iduser)";
+        final String query = " select * from users LEFT JOIN orders on users.id_user = orders.id_user";
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery(query);
 
             UserMapper userMapper = new UserMapper();
-            UserMapper orderMapper = new UserMapper();
+            OrderMapper orderMapper = new OrderMapper();
 
             while (rs.next()) {
                 User user = userMapper
                         .extractFromResultSet(rs);
-                Order order = userMapper
+                Order order = orderMapper
                         .extractFromResultSet(rs);
                 user = userMapper
-                        .makeUnique(users, user);
-                order = userMapper
-                        .makeUnique(users, user);
-                user.getUsers().add(user);
+                        .makeUnique(userMap, user);
+                order = orderMapper
+                        .makeUnique(orderMap, order);
+
+                user.getOrders().add(order);
             }
-            return new ArrayList<>(users.values());
+            return new ArrayList<>(userMap.values());
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        }*/
-        return null;
+        }
     }
 
     @Override

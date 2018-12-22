@@ -11,7 +11,7 @@ public class RouteMapper implements ObjectMapper<Route> {
     @Override
     public Route extractFromResultSet(ResultSet rs) throws SQLException {
         Route route = new Route();
-        route.setId(rs.getLong("id"));
+        route.setId(rs.getLong("id_route"));
         route.setRouteStart(rs.getString("route_start"));
         route.setRouteEnd(rs.getString("route_end"));
         route.setDistanceKm(rs.getInt("distance_km"));

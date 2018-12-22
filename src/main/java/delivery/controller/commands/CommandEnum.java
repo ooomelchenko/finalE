@@ -17,7 +17,9 @@ public enum CommandEnum {
     ROUTES ("ROUTES", new RoutesCommand()) {},
     TARIFFS ("TARIFFS", new TariffsCommand()) {},
     CALCULATOR ("CALCULATOR", new CalculatorCommand()) {},
-    CALCULATE ("CALCULATE", new CalculateDeliveryPriceCommand()) {};
+    CALCULATE ("CALCULATE", new CalculateDeliveryPriceCommand()) {},
+    TARIFFSBYROUTE("GETTARIFFLISTBYROUTE", new GetTariffListByRouteCommand()) {},
+    ORDERCREATOR("ORDERCREATOR", new OrderCreatorCommand());
 
     /*
 
