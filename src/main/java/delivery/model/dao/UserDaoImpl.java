@@ -1,13 +1,13 @@
 package delivery.model.dao;
 
-import delivery.model.dao.mapper.OrderMapper;
-import delivery.model.dao.mapper.UserMapper;
-import delivery.model.entity.Order;
-import delivery.model.entity.User;
-import delivery.util.bundleManagers.SqlQueryManager;
+        import delivery.model.dao.mapper.OrderMapper;
+        import delivery.model.dao.mapper.UserMapper;
+        import delivery.model.entity.Order;
+        import delivery.model.entity.User;
+        import delivery.util.bundleManagers.SqlQueryManager;
 
-import java.sql.*;
-import java.util.*;
+        import java.sql.*;
+        import java.util.*;
 
 public class UserDaoImpl implements UserDao {
 
@@ -36,17 +36,31 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(long id) {
-        return null;
+
+        UserMapper userMapper = new UserMapper();
+
+        try (PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("user.findById"))) {
+
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+
+            return userMapper.extractFromResultSet(rs);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    @Override
+        @Override
     public List<User> findAll() {
         Map<Long, User> userMap = new HashMap<>();
         Map<Long, Order> orderMap = new HashMap<>();
 
-        final String query = " select * from users LEFT JOIN orders on users.id_user = orders.id_user";
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery(query);
+            ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("user.findAll"));
 
             UserMapper userMapper = new UserMapper();
             OrderMapper orderMapper = new OrderMapper();
@@ -92,13 +106,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findByLoginPassword(String login, String password) {
 
+        UserMapper mapper = new UserMapper();
+
         Optional<User> result = Optional.empty();
         try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("user.findByLoginPassword"))){
             ps.setString( 1, login);
             ps.setString( 2, password);
-            ResultSet rs;
-            rs = ps.executeQuery();
-            UserMapper mapper = new UserMapper();
+            ResultSet rs = ps.executeQuery();
+
             if (rs.next()){
                 result = Optional.of(mapper.extractFromResultSet(rs));
             }

@@ -10,6 +10,8 @@ public interface UserService {
 
     List<User> getAllUsers();
 
+    Optional<User> getById(long id);
+
     Optional<User> login(String login, String pass);
 
     Map<String, String> validateFields(Map<String, String> fieldMap);

@@ -20,6 +20,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void create(Order order) {
+
         try(PreparedStatement stOrder = connection.prepareStatement(SqlQueryManager.getProperty("order.create"), Statement.RETURN_GENERATED_KEYS);
             PreparedStatement stBill = connection.prepareStatement(SqlQueryManager.getProperty("bill.create"))){
             connection.setAutoCommit(false);
@@ -59,12 +60,14 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order findById(long id) {
 
+        OrderMapper mapper = new OrderMapper();
+
         try (PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("order.findById"))) {
 
             ps.setLong(1, id);
-            ResultSet rs;
-            rs = ps.executeQuery();
-            OrderMapper mapper = new OrderMapper();
+
+            ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 return mapper.extractFromResultSet(rs);
             }
@@ -94,10 +97,6 @@ public class OrderDaoImpl implements OrderDao {
     public List<Order> findByUserId(long idUser) {
 
         Map<Long, Order> orderMap = new HashMap<>();
-/*        Map<Long, Bill> billMap = new HashMap<>();
-        Map<Long, AvailableOption> availableOptionMap = new HashMap<>();
-        Map<Long, Route> routeMap = new HashMap<>();
-        Map<Long, Tariff> tariffMap = new HashMap<>();*/
 
         OrderMapper orderMapper = new OrderMapper();
         BillMapper billMapper = new BillMapper();
@@ -118,12 +117,6 @@ public class OrderDaoImpl implements OrderDao {
                 AvailableOption availableOption = availableOptionMapper.extractFromResultSet(rs);
                 Route route = routeMapper.extractFromResultSet(rs);
                 Tariff tariff = tariffMapper.extractFromResultSet(rs);
-
-               /* order = orderMapper.makeUnique(orderMap, order);
-                bill = billMapper.makeUnique(billMap, bill);
-                availableOption = availableOptionMapper.makeUnique(availableOptionMap, availableOption);
-                route = routeMapper.makeUnique(routeMap, route);
-                tariff = tariffMapper.makeUnique(tariffMap, tariff);*/
 
                 availableOption.setTariff(tariff);
                 availableOption.setRoute(route);

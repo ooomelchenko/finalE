@@ -11,6 +11,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    private long accountSum=0L;
     private Role role = Role.GUEST;
     private List<Order> orders = new ArrayList<>();
 
@@ -109,6 +110,13 @@ public class User {
         this.orders = orders;
     }
 
+    public long getAccountSum() {
+        return accountSum;
+    }
+    public void setAccountSum(long accountSum) {
+        this.accountSum = accountSum;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -118,6 +126,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", accountSum=" + accountSum +
                 ", role=" + role +
                 ", orders=" + orders +
                 '}';

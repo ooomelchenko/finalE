@@ -63,8 +63,8 @@ public class RouteDaoImpl implements RouteDao {
 
             ResultSet rs = st.executeQuery();
             rs.next();
-
             return routeMapper.extractFromResultSet(rs);
+
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

@@ -32,7 +32,7 @@
 </style>
 
 <head>
-    <title>UserMenu</title>
+    <title>Profile</title>
 </head>
 
 <body>
@@ -73,7 +73,34 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="jumbotron col-md-12">
+        <div class="jumbotron col-md-3" id="div_user_profile">
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th rowspan="2" scope="col"><fmt:message key="nav.profile"/></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-info">
+                    <th scope="row"><fmt:message key="input.login"/></th>
+                    <td><c:out value="${requestScope.userFull.getLogin()} "/></td>
+                </tr>
+                <tr class="table-info">
+                    <th scope="row"><fmt:message key="input.email"/></th>
+                    <td><c:out value="${requestScope.userFull.getEmail()} "/></td>
+                </tr>
+                <tr class="table-info">
+                    <th scope="row"><fmt:message key="user.account.sum"/></th>
+                    <td><c:out value="${requestScope.userFull.getAccountSum()/100} "/></td>
+                </tr>
+                </tbody>
+            </table>
+            <a type="button" href="${pageContext.request.contextPath}/delivery/user/refill" class="button_pay btn btn-primary btn"><fmt:message key="button.refill"/></a>
+
+        </div>
+
+        <div class="jumbotron col-md-9">
 
             <table class="table table-hover">
                 <thead>
@@ -87,7 +114,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="order" items="${requestScope.orderList}">
+                <c:forEach var="order" items="${requestScope.userFull.getOrders()}">
                     <tr class="table-p">
                         <td><c:out value="${order.arrivalDate} "/></td>
                         <td><c:out value="${order.type} "/></td>

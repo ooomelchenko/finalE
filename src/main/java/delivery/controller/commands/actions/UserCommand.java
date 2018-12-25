@@ -1,18 +1,19 @@
 package delivery.controller.commands.actions;
 
 import delivery.controller.commands.Command;
-import delivery.model.entity.Order;
 import delivery.model.entity.User;
 import delivery.model.service.OrderService;
 import delivery.model.service.OrderServiceImpl;
+import delivery.model.service.UserService;
+import delivery.model.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.Optional;
 
 public class UserCommand implements Command {
 
-
+    private UserService userService = new UserServiceImpl();
     private OrderService orderService = new OrderServiceImpl();
 
     @Override
@@ -20,9 +21,14 @@ public class UserCommand implements Command {
 
         User user = (User) request.getSession().getAttribute("user");
 
-        List<Order> orderList = orderService.findByUserId(user.getId());
+        Optional<User> optionalUser = userService.getById(user.getId());
 
-        request.setAttribute("orderList", orderList);
+        if(optionalUser.isPresent()){
+            user = optionalUser.get();
+            user.setOrders(orderService.findByUserId(optionalUser.get().getId()));
+        }
+
+        request.setAttribute("userFull", user);
 
         return "/WEB-INF/view/user/userMenu.jsp";
     }

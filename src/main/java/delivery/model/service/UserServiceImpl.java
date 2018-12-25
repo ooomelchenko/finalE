@@ -22,6 +22,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> getById(long id){
+        try (UserDao userDao = daoFactoryAbst.createUserDao()) {
+            return Optional.ofNullable(userDao.findById(id));
+        }
+    }
+
+    @Override
     public Optional<User> login(String login, String pass) {
         Optional<User> result; //= Optional.empty();
         try (UserDao userDao = daoFactoryAbst.createUserDao()) {

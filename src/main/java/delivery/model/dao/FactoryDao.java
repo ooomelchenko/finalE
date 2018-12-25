@@ -28,6 +28,10 @@ public class FactoryDao extends DaoFactoryAbst {
     public AvailableOptionDao createOptionDao() {
         return new AvailableOptionDaoImpl(getConnection());
     }
+    @Override
+    public BillDao createBillDao() {
+        return new BillDaoImpl(getConnection());
+    }
 
 
     private Connection getConnection(){
