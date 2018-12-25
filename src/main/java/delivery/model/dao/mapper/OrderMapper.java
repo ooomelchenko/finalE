@@ -13,7 +13,8 @@ public class OrderMapper implements ObjectMapper<Order> {
         Order order = new Order();
         order.setId(rs.getLong("id_order"));
         order.setWeightGr(rs.getInt("weight"));
-        order.setArrivalDate(rs.getDate("arrivaldate").toLocalDate());
+        order.setType(Order.Type.valueOf(rs.getString("type") ) );
+        order.setArrivalDate(rs.getDate("arrival_date").toLocalDate());
         return order;
     }
 

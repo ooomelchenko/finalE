@@ -1,11 +1,14 @@
 package delivery.model.dao;
 
-import delivery.model.dao.mapper.OrderMapper;
-import delivery.model.entity.Order;
+import delivery.model.dao.mapper.*;
+import delivery.model.entity.*;
 import delivery.util.bundleManagers.SqlQueryManager;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDaoImpl implements OrderDao {
 
@@ -85,6 +88,58 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public void delete(long id) {
 
+    }
+
+    @Override
+    public List<Order> findByUserId(long idUser) {
+
+        Map<Long, Order> orderMap = new HashMap<>();
+/*        Map<Long, Bill> billMap = new HashMap<>();
+        Map<Long, AvailableOption> availableOptionMap = new HashMap<>();
+        Map<Long, Route> routeMap = new HashMap<>();
+        Map<Long, Tariff> tariffMap = new HashMap<>();*/
+
+        OrderMapper orderMapper = new OrderMapper();
+        BillMapper billMapper = new BillMapper();
+        AvailableOptionMapper availableOptionMapper = new AvailableOptionMapper();
+        RouteMapper routeMapper = new RouteMapper();
+        TariffMapper tariffMapper = new TariffMapper();
+
+        try (PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("order.findByUserId"))) {
+
+            ps.setLong(1, idUser);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Order order = orderMapper.extractFromResultSet(rs);
+                Bill bill = billMapper.extractFromResultSet(rs);
+                AvailableOption availableOption = availableOptionMapper.extractFromResultSet(rs);
+                Route route = routeMapper.extractFromResultSet(rs);
+                Tariff tariff = tariffMapper.extractFromResultSet(rs);
+
+               /* order = orderMapper.makeUnique(orderMap, order);
+                bill = billMapper.makeUnique(billMap, bill);
+                availableOption = availableOptionMapper.makeUnique(availableOptionMap, availableOption);
+                route = routeMapper.makeUnique(routeMap, route);
+                tariff = tariffMapper.makeUnique(tariffMap, tariff);*/
+
+                availableOption.setTariff(tariff);
+                availableOption.setRoute(route);
+                bill.setOrder(order);
+                order.setAvailableOption(availableOption);
+                order.setBill(bill);
+
+                orderMapper.makeUnique(orderMap, order);
+
+            }
+
+            return new ArrayList<>(orderMap.values());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

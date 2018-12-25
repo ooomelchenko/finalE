@@ -4,6 +4,8 @@ import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.dao.OrderDao;
 import delivery.model.entity.Order;
 
+import java.util.List;
+
 public class OrderServiceImpl implements OrderService {
 
     private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();
@@ -12,6 +14,12 @@ public class OrderServiceImpl implements OrderService {
     public void create(Order order) {
         try (OrderDao dao = daoFactoryAbst.createOrderDao()) {
             dao.create(order);
+        }
+    }
+    @Override
+    public List<Order> findByUserId(long idUser) {
+        try (OrderDao dao = daoFactoryAbst.createOrderDao()) {
+           return dao.findByUserId(idUser);
         }
     }
 }

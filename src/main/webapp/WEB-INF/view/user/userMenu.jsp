@@ -9,6 +9,13 @@
 <html>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function () {
+        $('.button_pay').click(function () {
+            $(this).hide();
+        })
+    })
+</script>
 
 <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
       type="text/css">
@@ -66,22 +73,38 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="jumbotron col-md-10">
+        <div class="jumbotron col-md-12">
 
             <table class="table table-hover">
                 <thead>
                 <tr>
+                    <th scope="col"><fmt:message key="order.table.head.date"/></th>
                     <th scope="col"><fmt:message key="order.table.head.type"/></th>
                     <th scope="col"><fmt:message key="order.table.head.weight"/></th>
-                    <th scope="col"><fmt:message key="order.table.head.date"/></th>
+                    <th scope="col"><fmt:message key="order.table.head.route"/></th>
+                    <th scope="col"><fmt:message key="order.table.head.tariff.name"/></th>
+                    <th scope="col"><fmt:message key="order.table.head.bill.total"/></th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="order" items="${requestScope.orderList}">
                     <tr class="table-p">
-                        <td><c:out value="${order.type} "/></td>
-                        <td><c:out value="${order.weight} "/></td>
                         <td><c:out value="${order.arrivalDate} "/></td>
+                        <td><c:out value="${order.type} "/></td>
+                        <td><c:out value="${order.weightGr/1000} "/></td>
+                        <td><c:out value="${order.availableOption.route.routeStart}-${order.availableOption.route.routeEnd} "/></td>
+                        <td><c:out value="${order.availableOption.tariff.name}"/></td>
+                        <td><c:out value="${order.bill.total/100} "/></td>
+                        <c:if test="${order.bill.isPaid() == false}">
+                            <td>
+                                <a type="button" href="${pageContext.request.contextPath}/delivery/user/pay?idBill=${order.bill.id}" class="button_pay btn btn-outline-success btn-sm"><fmt:message key="button.pay"/></a>
+                            </td>
+                        </c:if>
+                        <c:if test="${order.bill.isPaid() == true}">
+                            <td>
+                                <span class="badge badge-success"><fmt:message key="badge.paid"/></span>
+                            </td>
+                        </c:if>
                     </tr>
                 </c:forEach>
                 </tbody>
