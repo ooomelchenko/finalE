@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RegistrationCommand implements Command {
 
     private UserService userService = new UserServiceImpl();
-    private Map<String, String > fieldsMap = new ConcurrentHashMap<>();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -34,6 +33,7 @@ public class RegistrationCommand implements Command {
             return "/WEB-INF/view/registration.jsp";
         }
 
+        Map<String, String> fieldsMap = new ConcurrentHashMap<>();
         fieldsMap.put("login", login);
         fieldsMap.put("password", password);
         fieldsMap.put("firstname", firstname);

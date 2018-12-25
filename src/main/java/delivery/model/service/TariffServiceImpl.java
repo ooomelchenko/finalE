@@ -26,7 +26,16 @@ public class TariffServiceImpl implements TariffService {
     }
 
     @Override
-    public Tariff create(Tariff tariff) {
-        return null;
+    public void create(Tariff tariff) {
+        try (TariffDao dao = daoFactoryAbst.createTariffDao()) {
+            dao.create(tariff);
+        }
+    }
+
+    @Override
+    public List<Tariff> findAvailableByRouteId(long routeId) {
+        try (TariffDao dao = daoFactoryAbst.createTariffDao()) {
+            return dao.findAvailableByRouteId(routeId);
+        }
     }
 }

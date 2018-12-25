@@ -1,5 +1,6 @@
 package delivery.model.service;
 
+import delivery.model.dto.RouteLocale;
 import delivery.model.entity.Route;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public interface RouteService {
 
     Optional<Route> getRoute(long id);
 
-    Route create(Route route);
+    void create(Route route);
 
+    void createWithLocalFields(RouteLocale routeLocale);
 }

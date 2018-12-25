@@ -24,7 +24,12 @@ public class FactoryDao extends DaoFactoryAbst {
     public OrderDao createOrderDao() {
         return new OrderDaoImpl(getConnection());
     }
-    
+    @Override
+    public AvailableOptionDao createOptionDao() {
+        return new AvailableOptionDaoImpl(getConnection());
+    }
+
+
     private Connection getConnection(){
         try {
             return dataSource.getConnection();

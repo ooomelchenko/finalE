@@ -1,6 +1,7 @@
 package delivery.model.dao;
 
 import delivery.model.dao.mapper.RouteMapper;
+import delivery.model.dto.RouteLocale;
 import delivery.model.entity.Route;
 import delivery.util.bundleManagers.SqlQueryManager;
 
@@ -17,8 +18,38 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public void create(Route entity) {
+    public void create(Route route) {
 
+        try(PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("route.create"))){
+
+            st.setString(1, route.getRouteStart());
+            st.setString(2, route.getRouteEnd());
+            st.setInt(3, route.getDistanceKm());
+
+            st.execute();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void createWithLocalFields(RouteLocale routeLocale){
+
+        RouteLocale.LocalFields uaFields = routeLocale.getLocalFieldsMap().get("ua");
+
+        try(PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("route.create.withLocalFields"))){
+
+            st.setString(1, routeLocale.getRoute().getRouteStart());
+            st.setString(2, routeLocale.getRoute().getRouteEnd());
+            st.setInt(3, routeLocale.getRoute().getDistanceKm());
+            st.setString(4, uaFields.getRouteStart());
+            st.setString(5, uaFields.getRouteEnd());
+            st.execute();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

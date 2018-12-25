@@ -10,6 +10,8 @@ public class AvailableOption {
     public AvailableOption() {
     }
 
+
+
     public long getId() {
         return id;
     }

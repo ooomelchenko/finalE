@@ -49,6 +49,26 @@ public class TariffDaoImpl implements TariffDao {
         try (Statement st = connection.createStatement()) {
 
             ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("tariff.findAll"));
+            while (rs.next()) {
+                tariffList.add(tariffMapper.extractFromResultSet(rs));
+            }
+            return tariffList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Tariff> findAvailableByRouteId(long routeId) {
+
+        List<Tariff> tariffList = new ArrayList<>();
+        TariffMapper tariffMapper = new TariffMapper();
+
+        try (PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("tariff.find.byRouteId"))) {
+
+            st.setLong(1, routeId);
+            ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
                 tariffList.add(tariffMapper.extractFromResultSet(rs));

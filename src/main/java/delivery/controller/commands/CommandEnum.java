@@ -19,10 +19,10 @@ public enum CommandEnum {
     CALCULATOR ("CALCULATOR", new CalculatorCommand()) {},
     CALCULATE ("CALCULATE", new CalculateDeliveryPriceCommand()) {},
     TARIFFSBYROUTE("GETTARIFFLISTBYROUTE", new GetTariffListByRouteCommand()) {},
-    ORDERCREATOR("ORDERCREATOR", new OrderCreatorCommand());
+    ORDERCREATOR("USER/ORDERCREATOR", new OrderCreatorCommand()),
+    CREATEORDER("USER/CREATEORDER", new CreateOrderCommand());
 
     /*
-
     SORTBYPRICE ("ADMIN", new AdminCommand()) {},
     FILTERORDERS ("ADMIN", new AdminCommand()){};
     */

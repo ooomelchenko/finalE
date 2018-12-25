@@ -6,10 +6,11 @@ public class Order {
 
     private long id;
     private Type type;
-    private int weight;
+    private int weightGr;
     private LocalDate arrivalDate;
     private AvailableOption availableOption;
     private Bill bill;
+    private User user;
 
     public enum Type {MAIL, PARCEL, PACKAGE, CARGO}
 
@@ -30,11 +31,11 @@ public class Order {
         this.type = type;
     }
 
-    public int getWeight() {
-        return weight;
+    public int getWeightGr() {
+        return weightGr;
     }
-    public void setWeight(int weight) {
-        this.weight = weight;
+    public void setWeightGr(int weightGr) {
+        this.weightGr = weightGr;
     }
 
     public LocalDate getArrivalDate() {
@@ -56,5 +57,12 @@ public class Order {
     }
     public void setBill(Bill bill) {
         this.bill = bill;
+    }
+
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 }

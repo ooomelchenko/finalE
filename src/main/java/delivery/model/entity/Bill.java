@@ -4,7 +4,7 @@ public class Bill {
 
     private long id;
     private long total;
-    private boolean isPaid;
+    private boolean isPaid ;
     private User user;
     private Order order;
 

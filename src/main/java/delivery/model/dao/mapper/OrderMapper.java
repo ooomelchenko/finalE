@@ -12,7 +12,7 @@ public class OrderMapper implements ObjectMapper<Order> {
     public Order extractFromResultSet(ResultSet rs) throws SQLException {
         Order order = new Order();
         order.setId(rs.getLong("id_order"));
-        order.setWeight(rs.getInt("weight"));
+        order.setWeightGr(rs.getInt("weight"));
         order.setArrivalDate(rs.getDate("arrivaldate").toLocalDate());
         return order;
     }

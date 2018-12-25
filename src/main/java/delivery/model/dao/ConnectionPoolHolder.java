@@ -20,6 +20,7 @@ import javax.sql.DataSource;
                     ds.setMinIdle(5);
                     ds.setMaxIdle(10);
                     ds.setMaxOpenPreparedStatements(100);
+                    //ds.setDefaultAutoCommit(false);
                     dataSource = ds;
                 }
             }

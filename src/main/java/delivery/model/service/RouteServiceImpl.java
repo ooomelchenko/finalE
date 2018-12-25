@@ -2,6 +2,7 @@ package delivery.model.service;
 
 import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.dao.RouteDao;
+import delivery.model.dto.RouteLocale;
 import delivery.model.entity.Route;
 
 import java.util.List;
@@ -26,7 +27,16 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public Route create(Route route) {
-        return null;
+    public void create(Route route) {
+        try (RouteDao dao = daoFactoryAbst.createRouteDao()) {
+            dao.create(route);
+        }
+    }
+
+    @Override
+    public void createWithLocalFields(RouteLocale routeLocale){
+        try (RouteDao dao = daoFactoryAbst.createRouteDao()) {
+             dao.createWithLocalFields(routeLocale);
+        }
     }
 }

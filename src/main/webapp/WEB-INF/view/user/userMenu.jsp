@@ -41,7 +41,7 @@
                 <a class="nav-link" href="${pageContext.request.contextPath}/delivery/user"><fmt:message key="nav.profile"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/delivery/ordercreator"><fmt:message key="nav.order.creator"/></a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/delivery/user/ordercreator"><fmt:message key="nav.order.creator"/></a>
             </li>
         </ul>
         <div>

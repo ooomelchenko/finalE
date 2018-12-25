@@ -4,10 +4,7 @@ import delivery.model.dao.mapper.OrderMapper;
 import delivery.model.entity.Order;
 import delivery.util.bundleManagers.SqlQueryManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class OrderDaoImpl implements OrderDao {
@@ -19,8 +16,41 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void create(Order entity) {
+    public void create(Order order) {
+        try(PreparedStatement stOrder = connection.prepareStatement(SqlQueryManager.getProperty("order.create"), Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stBill = connection.prepareStatement(SqlQueryManager.getProperty("bill.create"))){
+            connection.setAutoCommit(false);
 
+            stOrder.setString(1, order.getType().name());
+            stOrder.setInt(2, order.getWeightGr());
+            stOrder.setDate(3, Date.valueOf(order.getArrivalDate()));
+            stOrder.setLong(4, order.getAvailableOption().getId());
+            stOrder.setLong(5, order.getUser().getId());
+
+            stOrder.execute();
+
+            ResultSet rs = stOrder.getGeneratedKeys();
+            rs.next();
+            long orderId = rs.getLong(1);
+
+            stBill.setLong(1, order.getBill().getTotal());
+            stBill.setBoolean(2, order.getBill().isPaid());
+            stBill.setLong(3, order.getUser().getId());
+            stBill.setLong(4, orderId);
+
+            stBill.execute();
+
+            connection.commit();
+
+        }
+        catch (SQLException e){
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
     }
 
     @Override

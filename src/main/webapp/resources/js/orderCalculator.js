@@ -28,6 +28,7 @@ $(document).ready(function () {
 
             },
             error: function () {
+                alert('error');
             }
 
         });
@@ -40,9 +41,9 @@ $(document).ready(function () {
             getPrice_Date();
         }
         else{
-            alert('<fmt:message key="wrong.form.fieldset"/>');
+
         }
 
     });
 
-})
+});

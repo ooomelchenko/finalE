@@ -7,6 +7,8 @@ public abstract class DaoFactoryAbst {
     public abstract RouteDao createRouteDao();
     public abstract TariffDao createTariffDao();
     public abstract OrderDao createOrderDao();
+    public abstract AvailableOptionDao createOptionDao();
+
 
     public static DaoFactoryAbst getInstance(){
         if( daoFactoryAbst == null ){
