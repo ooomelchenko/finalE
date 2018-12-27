@@ -11,14 +11,26 @@
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
+
         $('.button_pay').click(function () {
             $(this).hide();
+            $.ajax({
+                url: "${pageContext.request.contextPath}/delivery/user/bill/pay",
+                method: "POST",
+                data: {billId: $(this).val()},
+
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    $(this).parent().append('<span class="badge badge-success"><fmt:message key="badge.paid"/></span>');
+                }
+            });
         })
     })
 </script>
 
-<link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
-      type="text/css">
+<link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <style>
     #lang-div img {
         width: 20px;
@@ -76,11 +88,6 @@
         <div class="jumbotron col-md-3" id="div_user_profile">
 
             <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th rowspan="2" scope="col"><fmt:message key="nav.profile"/></th>
-                </tr>
-                </thead>
                 <tbody>
                 <tr class="table-info">
                     <th scope="row"><fmt:message key="input.login"/></th>
@@ -96,7 +103,7 @@
                 </tr>
                 </tbody>
             </table>
-            <a type="button" href="${pageContext.request.contextPath}/delivery/user/refill" class="button_pay btn btn-primary btn"><fmt:message key="button.refill"/></a>
+            <a href="${pageContext.request.contextPath}/delivery/user/account/invoice" type="button"  class="button_pay btn btn-primary btn-sm"><fmt:message key="button.refill"/></a>
 
         </div>
 
@@ -124,7 +131,7 @@
                         <td><c:out value="${order.bill.total/100} "/></td>
                         <c:if test="${order.bill.isPaid() == false}">
                             <td>
-                                <a type="button" href="${pageContext.request.contextPath}/delivery/user/pay?idBill=${order.bill.id}" class="button_pay btn btn-outline-success btn-sm"><fmt:message key="button.pay"/></a>
+                                <button value="${order.bill.id}" class="button_pay btn btn-outline-success btn-sm"><fmt:message key="button.pay"/></button>
                             </td>
                         </c:if>
                         <c:if test="${order.bill.isPaid() == true}">

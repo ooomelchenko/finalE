@@ -69,7 +69,11 @@ public class BillDaoImpl implements BillDao {
 
     @Override
     public void close() {
-
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -78,23 +82,32 @@ public class BillDaoImpl implements BillDao {
         long userId = bill.getUser().getId();
 
         try( PreparedStatement stUser = connection.prepareStatement(SqlQueryManager.getProperty("user.chargeOff"));
-             PreparedStatement checkBill = connection.prepareStatement(SqlQueryManager.getProperty("bill.checkIsPaid") );
+             PreparedStatement stUserCheck = connection.prepareStatement(SqlQueryManager.getProperty("user.findById"));
+             PreparedStatement stBillCheck = connection.prepareStatement(SqlQueryManager.getProperty("bill.checkIsPaid") );
              PreparedStatement stBill = connection.prepareStatement(SqlQueryManager.getProperty("bill.settleUp") ) ){
 
             connection.setAutoCommit(false);
 
             stUser.setLong(1, chargeSum);
             stUser.setLong(2, userId);
-            long accountResidual = stUser.executeQuery().getLong("account_sum");
+            stUser.executeUpdate();
 
-            checkBill.setLong(1, bill.getId());
-            boolean isAlreadyPaid = checkBill.executeQuery().getBoolean("is_paid");
+            stUserCheck.setLong(1, userId);
+            ResultSet rs = stUserCheck.executeQuery();
+            rs.next();
+            long accountResidual = rs.getLong("account_sum");
+
+            stBillCheck.setLong(1, bill.getId());
+            ResultSet resultSet = stBillCheck.executeQuery();
+            resultSet.next();
+            boolean isAlreadyPaid = resultSet.getBoolean("is_paid");
 
             stBill.setLong(1, bill.getId());
-            stBill.execute();
+            stBill.executeUpdate();
 
             if(accountResidual >=0 && !isAlreadyPaid){
                 connection.commit();
+                return true;
             }
             else {
                 connection.rollback();

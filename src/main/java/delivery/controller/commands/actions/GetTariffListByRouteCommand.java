@@ -33,8 +33,10 @@ public class GetTariffListByRouteCommand implements Command {
                 writer.print(stringJson);
 
             } catch (Exception e) {
+
+                response.setStatus(500);
                 e.printStackTrace();
-                return null;
+
             }
 
         return null;

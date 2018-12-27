@@ -20,12 +20,11 @@ public enum CommandEnum {
     CALCULATE ("CALCULATE", new CalculateDeliveryPriceCommand()) {},
     TARIFFSBYROUTE("GETTARIFFLISTBYROUTE", new GetTariffListByRouteCommand()) {},
     ORDERCREATOR("USER/ORDERCREATOR", new OrderCreatorCommand()),
-    CREATEORDER("USER/CREATEORDER", new CreateOrderCommand());
+    CREATEORDER("USER/CREATEORDER", new CreateOrderCommand()),
+    ACCOUNTINVOICE("USER/ACCOUNT/INVOICE", new AccountInvoiceCommand()),
+    ACCOUNTREFILL("USER/ACCOUNT/REFILL", new AccountRefillCommand()),
+    BILLPAY("USER/BILL/PAY", new BillPayCommand());
 
-    /*
-    SORTBYPRICE ("ADMIN", new AdminCommand()) {},
-    FILTERORDERS ("ADMIN", new AdminCommand()){};
-    */
     private String commandPath;
     private Command command;
 

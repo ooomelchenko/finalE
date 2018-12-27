@@ -23,6 +23,7 @@ public class OrderDaoImpl implements OrderDao {
 
         try(PreparedStatement stOrder = connection.prepareStatement(SqlQueryManager.getProperty("order.create"), Statement.RETURN_GENERATED_KEYS);
             PreparedStatement stBill = connection.prepareStatement(SqlQueryManager.getProperty("bill.create"))){
+
             connection.setAutoCommit(false);
 
             stOrder.setString(1, order.getType().name());
@@ -31,7 +32,7 @@ public class OrderDaoImpl implements OrderDao {
             stOrder.setLong(4, order.getAvailableOption().getId());
             stOrder.setLong(5, order.getUser().getId());
 
-            stOrder.execute();
+            stOrder.executeUpdate();
 
             ResultSet rs = stOrder.getGeneratedKeys();
             rs.next();
@@ -42,7 +43,7 @@ public class OrderDaoImpl implements OrderDao {
             stBill.setLong(3, order.getUser().getId());
             stBill.setLong(4, orderId);
 
-            stBill.execute();
+            stBill.executeUpdate();
 
             connection.commit();
 

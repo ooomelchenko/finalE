@@ -122,4 +122,18 @@ public class UserDaoImpl implements UserDao {
         }
         return result;
     }
+
+    @Override
+    public boolean refill(User user, Long payment){
+
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("user.refill"))){
+            ps.setLong(1, payment);
+            ps.setLong(2, user.getId());
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

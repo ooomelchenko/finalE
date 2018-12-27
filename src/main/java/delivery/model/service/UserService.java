@@ -20,4 +20,5 @@ public interface UserService {
 
     User create(String login, String pass, String firstName, String lastName, String email, String role);
 
+    boolean refill(User user, Long payment);
 }

@@ -60,5 +60,11 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public boolean refill(User user, Long payment) {
+        try (UserDao userDao = daoFactoryAbst.createUserDao()) {
+            return userDao.refill(user, payment);
+        }
+    }
 
 }
