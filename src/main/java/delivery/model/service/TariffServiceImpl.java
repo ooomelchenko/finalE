@@ -38,4 +38,12 @@ public class TariffServiceImpl implements TariffService {
             return dao.findAvailableByRouteId(routeId);
         }
     }
+
+    @Override
+    public boolean update(Tariff tariff){
+        try (TariffDao dao = daoFactoryAbst.createTariffDao()) {
+            dao.update(tariff);
+            return true;
+        }
+    }
 }

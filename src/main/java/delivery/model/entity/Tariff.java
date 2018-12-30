@@ -1,8 +1,9 @@
 package delivery.model.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Tariff {
+public class Tariff implements Serializable {
 
     private long id;
     private String name;

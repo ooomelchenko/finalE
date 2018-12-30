@@ -23,7 +23,9 @@ public enum CommandEnum {
     CREATEORDER("USER/CREATEORDER", new CreateOrderCommand()),
     ACCOUNTINVOICE("USER/ACCOUNT/INVOICE", new AccountInvoiceCommand()),
     ACCOUNTREFILL("USER/ACCOUNT/REFILL", new AccountRefillCommand()),
-    BILLPAY("USER/BILL/PAY", new BillPayCommand());
+    BILLPAY("USER/BILL/PAY", new BillPayCommand()),
+    ROUTESMANAGER ("ADMIN/ROUTES/MANAGER", new RoutesManagerCommand()) {},
+    TARIFFEDIT ("ADMIN/TARIFF/EDIT", new TariffEditCommand()) {};
 
     private String commandPath;
     private Command command;

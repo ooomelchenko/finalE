@@ -24,7 +24,7 @@
 
     <div class="jumbotron">
         <div class="alert alert-dismissible alert-warning">
-            <h2>Error <%= exception %></h2>
+            <h2>Error <%= exception.getMessage() %></h2>
         </div>
     </div>
 

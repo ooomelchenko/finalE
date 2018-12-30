@@ -14,4 +14,6 @@ public interface TariffService {
     void create(Tariff tariff);
 
     List<Tariff> findAvailableByRouteId(long routeId);
+
+    boolean update(Tariff tariff);
 }

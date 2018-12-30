@@ -81,8 +81,19 @@ public class TariffDaoImpl implements TariffDao {
     }
 
     @Override
-    public void update(Tariff entity) {
+    public void update(Tariff tariff) {
 
+        try(PreparedStatement st = connection.prepareStatement("Update tariffs set name = ?, cost_per_km=?, cost_per_kg=?, pace_day_km=? where id_tariff=?")){
+
+            st.setString(1, tariff.getName());
+            st.setLong(2, tariff.getCostPerKm());
+            st.setLong(3, tariff.getCostPerKg());
+            st.setLong(4, tariff.getPaceDayKm());
+            st.setLong(5, tariff.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

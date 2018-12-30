@@ -19,7 +19,6 @@ public class AccountRefillCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
         User user = (User)request.getSession().getAttribute("user");
-        System.out.println(request.getParameter("payment"));
         long payment = Long.parseLong(request.getParameter("payment"));
         String lang = (String) request.getSession().getAttribute("lang");
 
