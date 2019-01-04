@@ -38,4 +38,11 @@ public class AvailableOptionServiceImpl implements AvailableOptionService {
             return Optional.ofNullable(dao.findByRouteTariffId(id_route, id_tariff));
         }
     }
+
+    @Override
+    public int updateOrInsert(List<AvailableOption> optionList){
+        try (AvailableOptionDao dao = daoFactoryAbst.createOptionDao()) {
+            return dao.updateOrInsert(optionList);
+        }
+    }
 }

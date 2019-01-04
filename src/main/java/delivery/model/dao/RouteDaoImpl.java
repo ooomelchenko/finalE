@@ -1,13 +1,17 @@
 package delivery.model.dao;
 
 import delivery.model.dao.mapper.RouteMapper;
+import delivery.model.dao.mapper.TariffMapper;
 import delivery.model.dto.RouteLocale;
 import delivery.model.entity.Route;
+import delivery.model.entity.Tariff;
 import delivery.util.bundleManagers.SqlQueryManager;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RouteDaoImpl implements RouteDao {
 
@@ -75,17 +79,26 @@ public class RouteDaoImpl implements RouteDao {
     @Override
     public List<Route> findAll() {
 
-        List<Route> routeList = new ArrayList<>();
+        Map<Long, Route> routeMap = new HashMap<>();
+        Map<Long, Tariff> tariffMap = new HashMap<>();
+
         RouteMapper routeMapper = new RouteMapper();
+        TariffMapper tariffMapper = new TariffMapper();
 
         try (Statement st = connection.createStatement()) {
 
             ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("route.findAll"));
 
             while (rs.next()) {
-                routeList.add(routeMapper.extractFromResultSet(rs));
+
+                Route route = routeMapper.makeUnique(routeMap, routeMapper.extractFromResultSet(rs));
+
+                Tariff tariff = tariffMapper.makeUnique(tariffMap, tariffMapper.extractFromResultSet(rs));
+
+                route.getTariffList().add(tariff);
+
             }
-            return routeList;
+            return new ArrayList<>(routeMap.values());
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

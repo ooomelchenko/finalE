@@ -10,7 +10,11 @@ public class AvailableOption {
     public AvailableOption() {
     }
 
-
+    public AvailableOption(Route route, Tariff tariff, boolean isAvailable) {
+        this.isAvailable = isAvailable;
+        this.route = route;
+        this.tariff = tariff;
+    }
 
     public long getId() {
         return id;

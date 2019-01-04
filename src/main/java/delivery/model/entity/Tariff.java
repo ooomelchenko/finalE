@@ -1,7 +1,9 @@
 package delivery.model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Tariff implements Serializable {
 
@@ -11,7 +13,7 @@ public class Tariff implements Serializable {
     private long costPerKg;
     private int paceDayKm;
 
-    private List<Route> routeList;
+    private List<Route> routeList = new ArrayList<>();
 
     public Tariff() {
     }
@@ -56,5 +58,21 @@ public class Tariff implements Serializable {
     }
     public void setRouteList(List<Route> routeList) {
         this.routeList = routeList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tariff tariff = (Tariff) o;
+        return Objects.equals(name, tariff.name)&&
+                costPerKm == tariff.costPerKm &&
+                costPerKg == tariff.costPerKg &&
+                paceDayKm == tariff.paceDayKm;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, costPerKm, costPerKg, paceDayKm);
     }
 }

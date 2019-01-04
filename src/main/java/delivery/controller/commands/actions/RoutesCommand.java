@@ -12,7 +12,7 @@ public class RoutesCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().setAttribute("routeList", routeService.getAllRoutes());
+        request.setAttribute("routeList", routeService.getAllRoutes());
         return "/WEB-INF/view/routesList.jsp";
     }
 }

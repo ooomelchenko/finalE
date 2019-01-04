@@ -9,6 +9,43 @@
 <html>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function () {
+        $('.td_checkbox_tariff').change(function () {
+            $(this).parent().find('.td_buttons_change').show();
+        });
+        $('.button_change_ok').click(function () {
+
+            var button_change_ok = $(this);
+
+            var tariffJson = [];
+
+            $(this).parent().parent().find('.checkbox_tariff').each(function () {
+                tariffJson.push({
+                    id: $(this).val(),
+                    isAvailable: $(this).is(':checked')
+                });
+            });
+
+            $.ajax({
+                url: "${pageContext.request.contextPath}/delivery/admin/option/edit",
+                method: "POST",
+                data: {
+                    routeId: $(this).val(),
+                    tariffArray: JSON.stringify(tariffJson)
+                },
+
+                success: function () {
+                    button_change_ok.parent().hide();
+                    button_change_ok.parent().next().append('<span class="badge badge-success badge-sm"><fmt:message key="badge.edit.success"/></span>');
+                },
+                error: function () {
+                    button_change_ok.parent().next().append('<span class="badge badge-error badge-sm"><fmt:message key="badge.edit.error"/></span>');
+                }
+            });
+        })
+    })
+</script>
 
 <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <style>
@@ -66,25 +103,50 @@
     <table class="table table-hover">
         <thead>
         <tr >
-            <th scope="col"><fmt:message key="route.table.head.start"/></th>
-            <th scope="col"><fmt:message key="route.table.head.end"/></th>
-            <th scope="col"><fmt:message key="route.table.head.distance"/></th>
+            <th scope="col" class="col-2"><fmt:message key="route.table.head.start"/></th>
+            <th scope="col" class="col-2"><fmt:message key="route.table.head.end"/></th>
+            <th scope="col" class="col-2"><fmt:message key="route.table.head.distance"/></th>
+            <c:forEach var="tariff" items="${requestScope.tariffList}">
+                <th class="col-1"><c:out value="${tariff.getName()} "/></th>
+            </c:forEach>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="route" items="${sessionScope.routeList}">
+        <c:forEach var="route" items="${requestScope.routeList}">
+
             <tr class="table-p">
 
                 <td><c:out value="${route.routeStart} "/></td>
                 <td><c:out value="${route.routeEnd} "/></td>
                 <td><c:out value="${route.distanceKm} "/></td>
+                <c:forEach var="tariff" items="${requestScope.tariffList}">
+                    <td class="td_checkbox_tariff">
+                    <c:if test="${route.getTariffList().contains(tariff)}">
+                        <input class="checkbox_tariff" type="checkbox" checked="checked" value="${tariff.getId()}">
+                    </c:if>
+                    <c:if test="${!route.getTariffList().contains(tariff)}">
+                        <input class="checkbox_tariff" type="checkbox" value="${tariff.getId()}">
+                    </c:if>
+                    </td>
+                </c:forEach>
+                <td class="td_buttons_change" style="display: none">
+                    <button class="btn btn-sm btn-outline-success button_change_ok" value="${route.getId()}">
+                        ok
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning button_change_cancel">
+                        cancel
+                    </button>
+                </td>
+                <td>
 
+                </td>
             </tr>
+
         </c:forEach>
         </tbody>
 
     </table>
-
 
 </div>
 

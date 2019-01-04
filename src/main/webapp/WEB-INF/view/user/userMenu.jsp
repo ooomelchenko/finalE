@@ -103,7 +103,7 @@
                 </tr>
                 </tbody>
             </table>
-            <a href="${pageContext.request.contextPath}/delivery/user/account/invoice" type="button"  class="button_pay btn btn-primary btn-sm"><fmt:message key="button.refill"/></a>
+            <a href="${pageContext.request.contextPath}/delivery/user/account/invoice" type="button" class="btn btn-primary btn-sm"><fmt:message key="button.refill"/></a>
 
         </div>
 

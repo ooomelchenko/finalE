@@ -25,7 +25,8 @@ public enum CommandEnum {
     ACCOUNTREFILL("USER/ACCOUNT/REFILL", new AccountRefillCommand()),
     BILLPAY("USER/BILL/PAY", new BillPayCommand()),
     ROUTESMANAGER ("ADMIN/ROUTES/MANAGER", new RoutesManagerCommand()) {},
-    TARIFFEDIT ("ADMIN/TARIFF/EDIT", new TariffEditCommand()) {};
+    TARIFFEDIT ("ADMIN/TARIFF/EDIT", new TariffEditCommand()) {},
+    OPTIONEDIT("ADMIN/OPTION/EDIT", new OptionEditCommand());
 
     private String commandPath;
     private Command command;

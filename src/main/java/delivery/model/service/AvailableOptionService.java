@@ -13,4 +13,6 @@ public interface AvailableOptionService {
     void create(AvailableOption availableOption);
 
     Optional<AvailableOption> getByRouteTariffId(long id_route, long id_tariff);
+
+    int updateOrInsert(List<AvailableOption> optionList);
 }

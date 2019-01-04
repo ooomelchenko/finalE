@@ -22,7 +22,46 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
     @Override
     public void create(AvailableOption entity) {
+    }
 
+    @Override
+    public int updateOrInsert(List<AvailableOption> optionList){
+
+        try( PreparedStatement updateStatement = connection.prepareStatement(SqlQueryManager.getProperty("option.update.byRouteTariffId"));
+                PreparedStatement insertStatement = connection.prepareStatement(SqlQueryManager.getProperty("option.create")) ) {
+
+            connection.setAutoCommit(false);
+            int i=0;
+
+            for(AvailableOption option: optionList){
+                updateStatement.setBoolean(1, option.isAvailable());
+                updateStatement.setLong(2, option.getRoute().getId());
+                updateStatement.setLong(3, option.getTariff().getId());
+
+                int upd = updateStatement.executeUpdate();
+
+                if (upd==0){
+                    insertStatement.setBoolean(1, option.isAvailable());
+                    insertStatement.setLong(2, option.getRoute().getId());
+                    insertStatement.setLong(3, option.getTariff().getId());
+
+                    upd = insertStatement.executeUpdate();
+                }
+                i+=upd;
+            }
+            if(i==optionList.size()){
+                connection.commit();
+                return i;
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+
+        return 0;
     }
 
     @Override

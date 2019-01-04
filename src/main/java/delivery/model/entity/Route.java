@@ -1,5 +1,6 @@
 package delivery.model.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Route {
@@ -9,7 +10,7 @@ public class Route {
     private String routeEnd;
     private int distanceKm;
 
-    private List<Tariff> tariffList;
+    private List<Tariff> tariffList = new ArrayList<>();
 
     public Route() {
     }

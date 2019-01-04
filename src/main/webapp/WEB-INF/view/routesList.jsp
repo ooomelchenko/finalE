@@ -77,14 +77,14 @@
 <div class="jumbotron">
     <table class="table table-hover">
         <thead>
-        <tr >
+        <tr>
             <th scope="col"><fmt:message key="route.table.head.start"/></th>
             <th scope="col"><fmt:message key="route.table.head.end"/></th>
             <th scope="col"><fmt:message key="route.table.head.distance"/></th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="route" items="${sessionScope.routeList}">
+        <c:forEach var="route" items="${requestScope.routeList}">
             <tr class="table-p">
 
                 <td><c:out value="${route.routeStart} "/></td>
