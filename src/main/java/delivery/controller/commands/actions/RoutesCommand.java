@@ -4,6 +4,7 @@ import delivery.controller.commands.Command;
 import delivery.model.entity.Route;
 import delivery.model.service.RouteService;
 import delivery.model.service.RouteServiceImpl;
+import delivery.util.bundleManagers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +17,7 @@ public class RoutesCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-       int pSize =5;
+       int pSize = Integer.parseInt(ConfigurationManager.getProperty("page_portion"));
 
         List<Route> routeList = routeService.getAllRoutes();
 
