@@ -10,8 +10,10 @@ import delivery.util.bundleManagers.ContentManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashSet;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LoginCommand implements Command {
 
@@ -35,12 +37,12 @@ public class LoginCommand implements Command {
 
         if (user.isPresent()) {
 
-            HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext().getAttribute("loggedUsers");
-            if (loggedUsers.contains(user.get().getLogin())) {
+            Map<String, HttpSession> loggedUsers = (ConcurrentHashMap<String, HttpSession>) request.getServletContext().getAttribute("loggedUsers");
+            if (loggedUsers.containsKey(user.get().getLogin())) {
                 throw new RoleAccessDeniedCommandException("User already logged !");
             }
 
-            loggedUsers.add(user.get().getLogin());
+            loggedUsers.put(user.get().getLogin(), request.getSession());
             request.getServletContext().setAttribute("loggedUsers", loggedUsers);
 
             user.get().setPassword(null);

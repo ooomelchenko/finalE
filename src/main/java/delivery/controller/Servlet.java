@@ -9,8 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 @WebServlet(urlPatterns = "/delivery/*")
 public class Servlet extends HttpServlet {
@@ -19,7 +20,7 @@ public class Servlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
-        servletConfig.getServletContext().setAttribute("loggedUsers", new HashSet<String>());
+        servletConfig.getServletContext().setAttribute("loggedUsers", new ConcurrentHashMap<String, HttpSession>());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
