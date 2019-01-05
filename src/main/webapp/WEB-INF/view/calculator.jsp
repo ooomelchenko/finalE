@@ -10,7 +10,60 @@
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 
-<script src="${pageContext.request.contextPath}/resources/js/orderCalculator.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#div_calc_res').hide();
+
+        var orderType = $('#orderType');
+        var routeId = $('#routeId');
+        var tariffId = $('#tariffId');
+        var inputWeight = $('#inputWeight');
+
+        function isValidFieldset() {
+            return orderType.val() != null && routeId.val() != null && tariffId.val() != null && inputWeight.val() > 0;
+        }
+
+        function getPrice_Date(){
+            $.ajax({
+                url: "${pageContext.request.contextPath}/delivery/calculate",
+                method: "POST",
+                data: {orderType: orderType.val(),
+                    tariffId: tariffId.val(),
+                    routeId: routeId.val(),
+                    weight: inputWeight.val()*1000
+                },
+                dataType: "json",
+                success: function (calculationJsonResults) {
+
+                    $('#td_delivery_date').text(calculationJsonResults.arrivalDate);
+                    $('#td_delivery_price').text(calculationJsonResults.deliveryPrice/100);
+
+                },
+                error: function () {
+                    $('#div_results').append('<div id="div_res_message" class="alert alert-dismissible alert-warning">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '<strong><fmt:message key="message.wrongaction"/></a> </strong></div>')
+                }
+
+            });
+        }
+
+        $('#button_send').click( function(){
+            if(isValidFieldset()){
+                $('#div_calc_res').show();
+                $('#h_calc').hide();
+                getPrice_Date();
+            }
+            else{
+                $('#div_results').append('<div id="div_res_message" class="alert alert-dismissible alert-warning">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    '<strong><fmt:message key="wrong.form.fieldset"/></a> </strong></div>')
+            }
+
+        });
+
+    });
+</script>
 
 <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
       type="text/css">
@@ -83,21 +136,6 @@
     <div class="row">
 
         <div class="jumbotron col-3">
-            <div id="div_calc_res">
-                <h4>Результат розрахунку</h4>
-                <table class="table table-hover">
-                    <tbody>
-                    <tr class="table-success">
-                        <th scope="row">Дата доставки</th>
-                        <td id="td_delivery_date"></td>
-                    </tr>
-                    <tr class="table-success">
-                        <th scope="row">Стоимость доставки</th>
-                        <td id="td_delivery_price"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
 
             <h4 id="h_calc"><fmt:message key="calculator.head"/></h4>
 
@@ -141,8 +179,25 @@
                 </fieldset>
 
         </div>
-        <div class="jumbotron col-5">
+        <div class="jumbotron col-5 " id="div_results">
+
+            <div id="div_calc_res">
+                <h4>Результат розрахунку</h4>
+                <table class="table table-hover">
+                    <tbody>
+                    <tr class="table-success">
+                        <th scope="row">Дата доставки</th>
+                        <td id="td_delivery_date"></td>
+                    </tr>
+                    <tr class="table-success">
+                        <th scope="row">Стоимость доставки</th>
+                        <td id="td_delivery_price"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
         <div class="jumbotron col-4">
             <table class="table table-hover">
                 <thead>

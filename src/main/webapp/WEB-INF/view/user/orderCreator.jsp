@@ -44,7 +44,9 @@
 
                 },
                 error: function () {
-                    alert('error');
+                    $('#div_results').append('<div id="div_res_message" class="alert alert-dismissible alert-warning">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '<strong><fmt:message key="message.wrongaction"/></a> </strong></div>')
                 }
 
             });
@@ -58,7 +60,9 @@
                 getPrice_Date();
             }
             else{
-
+                $('#div_results').append('<div id="div_res_message" class="alert alert-dismissible alert-warning">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    '<strong><fmt:message key="wrong.form.fieldset"/></a> </strong></div>')
             }
 
         });
