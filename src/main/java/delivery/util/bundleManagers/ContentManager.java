@@ -7,18 +7,22 @@ import java.util.ResourceBundle;
 
 public class ContentManager {
     private static final Map<String, ResourceBundle> bundleMap = new HashMap<>();
+
     static {
-        bundleMap.put("ua", ResourceBundle.getBundle("content", new Locale("ua")));
-        bundleMap.put("en", ResourceBundle.getBundle("content", Locale.ENGLISH));
+        bundleMap.put("ua", ResourceBundle.getBundle("content", Locale.forLanguageTag("ua")));
+        bundleMap.put("en", ResourceBundle.getBundle("content"));
         bundleMap.put(null, ResourceBundle.getBundle("content"));
     }
 
-       private ContentManager() { }
+    private ContentManager() {
+    }
+
     public static String getProperty(String key) {
         return bundleMap.get(null).getString(key);
     }
+
     public static String getProperty(String key, String locale) {
-        return bundleMap.getOrDefault(locale , bundleMap.get(null))
+        return bundleMap.getOrDefault(locale, bundleMap.get(null))
                 .getString(key);
     }
 }
