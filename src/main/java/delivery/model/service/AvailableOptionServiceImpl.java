@@ -26,9 +26,9 @@ public class AvailableOptionServiceImpl implements AvailableOptionService {
     }
 
     @Override
-    public void create(AvailableOption availableOption) {
+    public long create(AvailableOption availableOption) {
         try (AvailableOptionDao dao = daoFactoryAbst.createOptionDao()) {
-            dao.create(availableOption);
+            return dao.create(availableOption);
         }
     }
 

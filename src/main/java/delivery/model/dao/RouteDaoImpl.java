@@ -44,22 +44,28 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public void createWithLocalFields(RouteLocale routeLocale){
+    public long createWithLocalFields(RouteLocale routeLocale){
 
         RouteLocale.LocalFields uaFields = routeLocale.getLocalFieldsMap().get("ua");
 
-        try(PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("route.create.withLocalFields"))){
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("route.create.withLocalFields"))){
 
-            st.setString(1, routeLocale.getRoute().getRouteStart());
-            st.setString(2, routeLocale.getRoute().getRouteEnd());
-            st.setInt(3, routeLocale.getRoute().getDistanceKm());
-            st.setString(4, uaFields.getRouteStart());
-            st.setString(5, uaFields.getRouteEnd());
+            ps.setString(1, routeLocale.getRoute().getRouteStart());
+            ps.setString(2, routeLocale.getRoute().getRouteEnd());
+            ps.setInt(3, routeLocale.getRoute().getDistanceKm());
+            ps.setString(4, uaFields.getRouteStart());
+            ps.setString(5, uaFields.getRouteEnd());
 
-            st.execute();
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+
+            return rs.getLong(1);
         }
         catch (SQLException e){
             e.printStackTrace();
+            return 0;
         }
     }
 

@@ -26,9 +26,9 @@ public class TariffServiceImpl implements TariffService {
     }
 
     @Override
-    public void create(Tariff tariff) {
+    public long create(Tariff tariff) {
         try (TariffDao dao = daoFactoryAbst.createTariffDao()) {
-            dao.create(tariff);
+           return dao.create(tariff);
         }
     }
 

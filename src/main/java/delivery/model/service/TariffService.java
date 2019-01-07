@@ -11,7 +11,7 @@ public interface TariffService {
 
     Optional<Tariff> getTariff(long id);
 
-    void create(Tariff tariff);
+    long create(Tariff tariff);
 
     List<Tariff> findAvailableByRouteId(long routeId);
 
