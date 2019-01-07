@@ -22,18 +22,24 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public void create(Route route) {
+    public long create(Route route) {
 
-        try(PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("route.create"))){
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("route.create"), Statement.RETURN_GENERATED_KEYS)){
 
-            st.setString(1, route.getRouteStart());
-            st.setString(2, route.getRouteEnd());
-            st.setInt(3, route.getDistanceKm());
+            ps.setString(1, route.getRouteStart());
+            ps.setString(2, route.getRouteEnd());
+            ps.setInt(3, route.getDistanceKm());
 
-            st.execute();
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+
+            return rs.getLong(1);
         }
         catch (SQLException e){
             e.printStackTrace();
+            return 0;
         }
     }
 
@@ -49,6 +55,7 @@ public class RouteDaoImpl implements RouteDao {
             st.setInt(3, routeLocale.getRoute().getDistanceKm());
             st.setString(4, uaFields.getRouteStart());
             st.setString(5, uaFields.getRouteEnd());
+
             st.execute();
         }
         catch (SQLException e){
@@ -67,6 +74,7 @@ public class RouteDaoImpl implements RouteDao {
 
             ResultSet rs = st.executeQuery();
             rs.next();
+
             return routeMapper.extractFromResultSet(rs);
 
         } catch (SQLException e) {
@@ -99,6 +107,7 @@ public class RouteDaoImpl implements RouteDao {
 
             }
             return new ArrayList<>(routeMap.values());
+
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -106,13 +115,35 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public void update(Route entity) {
+    public boolean update(Route route) {
 
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("route.update"))){
+
+            ps.setString(1, route.getRouteStart());
+            ps.setString(2, route.getRouteEnd());
+            ps.setInt(3, route.getDistanceKm());
+
+            return ps.executeUpdate()>0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
 
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("route.delete"))){
+
+            ps.setLong(1, id);
+
+            return ps.executeUpdate()>0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

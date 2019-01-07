@@ -19,7 +19,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void create(Order order) {
+    public long create(Order order) {
 
         try(PreparedStatement stOrder = connection.prepareStatement(SqlQueryManager.getProperty("order.create"), Statement.RETURN_GENERATED_KEYS);
             PreparedStatement stBill = connection.prepareStatement(SqlQueryManager.getProperty("bill.create"))){
@@ -36,6 +36,7 @@ public class OrderDaoImpl implements OrderDao {
 
             ResultSet rs = stOrder.getGeneratedKeys();
             rs.next();
+
             long orderId = rs.getLong(1);
 
             stBill.setLong(1, order.getBill().getTotal());
@@ -43,9 +44,11 @@ public class OrderDaoImpl implements OrderDao {
             stBill.setLong(3, order.getUser().getId());
             stBill.setLong(4, orderId);
 
-            stBill.executeUpdate();
+            if(stBill.executeUpdate()>0){
 
-            connection.commit();
+                connection.commit();
+                return orderId;
+            }
 
         }
         catch (SQLException e){
@@ -56,6 +59,7 @@ public class OrderDaoImpl implements OrderDao {
             }
             e.printStackTrace();
         }
+        return 0;
     }
 
     @Override
@@ -69,29 +73,85 @@ public class OrderDaoImpl implements OrderDao {
 
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                return mapper.extractFromResultSet(rs);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+            rs.next();
 
-        return null;
+            return mapper.extractFromResultSet(rs);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public List<Order> findAll() {
-        return null;
+
+        List<Order> orderList = new ArrayList<>();
+
+        OrderMapper orderMapper = new OrderMapper();
+        BillMapper billMapper = new BillMapper();
+        AvailableOptionMapper availableOptionMapper = new AvailableOptionMapper();
+        RouteMapper routeMapper = new RouteMapper();
+        TariffMapper tariffMapper = new TariffMapper();
+
+        try (PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("order.findAll"))) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Order order = orderMapper.extractFromResultSet(rs);
+
+                AvailableOption availableOption = availableOptionMapper.extractFromResultSet(rs);
+
+                availableOption.setTariff(tariffMapper.extractFromResultSet(rs));
+                availableOption.setRoute(routeMapper.extractFromResultSet(rs));
+
+                order.setAvailableOption(availableOption);
+                order.setBill(billMapper.extractFromResultSet(rs));
+
+                orderList.add(order);
+
+            }
+
+            return orderList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public void update(Order entity) {
+    public boolean update(Order order) {
+
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("order.update"))){
+
+            ps.setString(1, order.getType().name());
+            ps.setInt(2, order.getWeightGr());
+            ps.setDate(3, Date.valueOf(order.getArrivalDate()));
+
+            return (ps.executeUpdate()>0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
 
     }
 
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
 
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("order.delete"))){
+
+            ps.setLong(1, id);
+
+            return (ps.executeUpdate()>0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -114,6 +174,7 @@ public class OrderDaoImpl implements OrderDao {
             while (rs.next()) {
 
                 Order order = orderMapper.extractFromResultSet(rs);
+
                 Bill bill = billMapper.extractFromResultSet(rs);
                 AvailableOption availableOption = availableOptionMapper.extractFromResultSet(rs);
                 Route route = routeMapper.extractFromResultSet(rs);

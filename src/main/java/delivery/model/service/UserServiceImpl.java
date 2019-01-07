@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public Optional<User> login(String login, String pass) {
         Optional<User> result; //= Optional.empty();
         try (UserDao userDao = daoFactoryAbst.createUserDao()) {
-            result = userDao.findByLoginPassword(login, pass);
+            result = Optional.ofNullable(userDao.findByLoginPassword(login, pass));
         }
         return result;
     }

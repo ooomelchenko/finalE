@@ -17,7 +17,26 @@ public class TariffDaoImpl implements TariffDao {
     }
 
     @Override
-    public void create(Tariff entity) {
+    public long create(Tariff tariff) {
+
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("tariff.create"), Statement.RETURN_GENERATED_KEYS)){
+
+            ps.setString(1, tariff.getName());
+            ps.setLong(2, tariff.getCostPerKm());
+            ps.setLong(3, tariff.getCostPerKg());
+            ps.setLong(4, tariff.getPaceDayKm());
+
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+
+            return rs.getLong(1);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
 
     }
 
@@ -81,24 +100,37 @@ public class TariffDaoImpl implements TariffDao {
     }
 
     @Override
-    public void update(Tariff tariff) {
+    public boolean update(Tariff tariff) {
 
-        try(PreparedStatement st = connection.prepareStatement("Update tariffs set name = ?, cost_per_km=?, cost_per_kg=?, pace_day_km=? where id_tariff=?")){
+        try(PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("tariff.update"))){
 
             st.setString(1, tariff.getName());
             st.setLong(2, tariff.getCostPerKm());
             st.setLong(3, tariff.getCostPerKg());
             st.setLong(4, tariff.getPaceDayKm());
             st.setLong(5, tariff.getId());
-            st.executeUpdate();
+
+            return st.executeUpdate()>0;
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
 
+        try(PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("tariff.delete"))){
+
+            st.setLong(1, id);
+
+            return st.executeUpdate()>0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

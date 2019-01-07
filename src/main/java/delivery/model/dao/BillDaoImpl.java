@@ -3,13 +3,10 @@ package delivery.model.dao;
 import delivery.model.dao.mapper.BillMapper;
 import delivery.model.dao.mapper.UserMapper;
 import delivery.model.entity.Bill;
-import delivery.model.entity.User;
 import delivery.util.bundleManagers.SqlQueryManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BillDaoImpl implements BillDao {
@@ -21,7 +18,26 @@ public class BillDaoImpl implements BillDao {
     }
 
     @Override
-    public void create(Bill entity) {
+    public long create(Bill bill) {
+
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("bill.create"), Statement.RETURN_GENERATED_KEYS)){
+
+            ps.setLong(1, bill.getTotal());
+            ps.setBoolean(2, bill.isPaid());
+            ps.setLong(3, bill.getUser().getId());
+            ps.setLong(4, bill.getOrder().getId());
+
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+
+            return rs.getLong(1);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
 
     }
 
@@ -37,34 +53,78 @@ public class BillDaoImpl implements BillDao {
 
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            rs.next();
 
-                Bill bill =  billMapper.extractFromResultSet(rs);
-                User user = userMapper.extractFromResultSet(rs);
-                bill.setUser(user);
+            Bill bill =  billMapper.extractFromResultSet(rs);
+            bill.setUser(userMapper.extractFromResultSet(rs));
 
-                return bill;
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            return bill;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
     @Override
     public List<Bill> findAll() {
-        return null;
+
+        List<Bill> billList = new ArrayList<>();
+
+        BillMapper billMapper = new BillMapper();
+        UserMapper userMapper = new UserMapper();
+
+        try (PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("bill.findAll"))){
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+
+                Bill bill = billMapper.extractFromResultSet(rs);
+                bill.setUser(userMapper.extractFromResultSet(rs));
+
+                billList.add(bill);
+            }
+
+            return billList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public void update(Bill entity) {
+    public boolean update(Bill bill) {
+
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("bill.update"))){
+
+            ps.setLong(1, bill.getTotal());
+            ps.setBoolean(2, bill.isPaid());
+            ps.setLong(3, bill.getId());
+
+            return ps.executeUpdate()>0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
 
     }
 
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
 
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("bill.delete"))){
+
+            ps.setLong(1, id);
+
+            return ps.executeUpdate()>0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -78,6 +138,7 @@ public class BillDaoImpl implements BillDao {
 
     @Override
     public boolean settleUp(Bill bill){
+
         long chargeSum = bill.getTotal();
         long userId = bill.getUser().getId();
 
@@ -111,13 +172,13 @@ public class BillDaoImpl implements BillDao {
             }
             else {
                 connection.rollback();
-                throw new SQLException("Not enough money or already paid");
+                return false;
             }
-
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
+
     }
 }

@@ -6,10 +6,8 @@ import delivery.model.dao.mapper.TariffMapper;
 import delivery.model.entity.AvailableOption;
 import delivery.util.bundleManagers.SqlQueryManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AvailableOptionDaoImpl implements AvailableOptionDao {
@@ -21,7 +19,25 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
     }
 
     @Override
-    public void create(AvailableOption entity) {
+    public long create(AvailableOption option) {
+
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("option.create"), Statement.RETURN_GENERATED_KEYS)){
+
+            ps.setBoolean(1, option.isAvailable());
+            ps.setLong(2, option.getRoute().getId());
+            ps.setLong(3, option.getTariff().getId());
+
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+
+            return rs.getLong(1);
+
+        } catch (SQLException e) {
+            return 0;
+        }
+
     }
 
     @Override
@@ -31,6 +47,7 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
                 PreparedStatement insertStatement = connection.prepareStatement(SqlQueryManager.getProperty("option.create")) ) {
 
             connection.setAutoCommit(false);
+
             int i=0;
 
             for(AvailableOption option: optionList){
@@ -47,40 +64,108 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
                     upd = insertStatement.executeUpdate();
                 }
+
                 i+=upd;
+
             }
+
             if(i==optionList.size()){
+
                 connection.commit();
+
                 return i;
             }
 
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
         }
-
 
         return 0;
     }
 
     @Override
     public AvailableOption findById(long id) {
-        return null;
+
+        AvailableOptionMapper availableOptionMapper = new AvailableOptionMapper();
+
+        try (PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("option.findById"))) {
+
+            st.setLong(1, id);
+
+            ResultSet rs = st.executeQuery();
+
+            rs.next();
+
+            return availableOptionMapper.extractFromResultSet(rs);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public List<AvailableOption> findAll() {
-        return null;
+
+        List<AvailableOption> optionList = new ArrayList<>();
+
+        AvailableOptionMapper availableOptionMapper = new AvailableOptionMapper();
+        RouteMapper routeMapper = new RouteMapper();
+        TariffMapper tariffMapper = new TariffMapper();
+
+        try (Statement st = connection.createStatement()) {
+
+            ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("option.findAll"));
+
+            while (rs.next()) {
+
+                AvailableOption option = availableOptionMapper.extractFromResultSet(rs);
+
+                option.setRoute(routeMapper.extractFromResultSet(rs));
+                option.setTariff(tariffMapper.extractFromResultSet(rs));
+
+                optionList.add(option);
+            }
+
+            return optionList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public void update(AvailableOption entity) {
+    public boolean update(AvailableOption option) {
 
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("option.update.byRouteTariffId"))){
+
+            ps.setBoolean(1, option.isAvailable());
+            ps.setLong(2, option.getRoute().getId());
+            ps.setLong(3, option.getTariff().getId());
+
+            return (ps.executeUpdate()>0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
+
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("option.delete"))){
+
+            ps.setLong(1, id);
+
+            return (ps.executeUpdate()>0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
 
     }
 
@@ -107,7 +192,9 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
             ResultSet rs = st.executeQuery();
             rs.next();
+
             AvailableOption availableOption = optionMapper.extractFromResultSet(rs);
+
             availableOption.setRoute(routeMapper.extractFromResultSet(rs));
             availableOption.setTariff(tariffMapper.extractFromResultSet(rs));
 
