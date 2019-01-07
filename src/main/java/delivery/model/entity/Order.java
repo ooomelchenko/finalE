@@ -12,7 +12,22 @@ public class Order {
     private Bill bill;
     private User user;
 
-    public enum Type {MAIL, PARCEL, PACKAGE, CARGO}
+    public enum Type {
+        MAIL("order.type.mail"),
+        PARCEL("order.type.parcel"),
+        PACKAGE("order.type.package"),
+        CARGO("order.type.cargo");
+
+        private String bundle;
+
+        public String getBundle() {
+            return bundle;
+        }
+
+        Type(String bundle) {
+            this.bundle = bundle;
+        }
+    }
 
     public Order() {
     }

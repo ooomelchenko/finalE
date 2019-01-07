@@ -11,9 +11,11 @@
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
+
         $('.td_checkbox_tariff').change(function () {
             $(this).parent().find('.td_buttons_change').show();
         });
+
         $('.button_change_ok').click(function () {
 
             var button_change_ok = $(this);
@@ -43,6 +45,10 @@
                     button_change_ok.parent().next().append('<span class="badge badge-error badge-sm"><fmt:message key="badge.edit.error"/></span>');
                 }
             });
+        });
+        
+        $('.button_change_cancel').click(function () {
+            $(this).parent().hide();
         })
     })
 </script>
@@ -147,6 +153,31 @@
         </tbody>
 
     </table>
+
+    <div>
+        <ul class="pagination">
+            <li class="page-item <c:if test="${(requestScope.currentPortion-1)<1}"> <c:out value="disabled"/></c:if>" >
+                <a class="page-link" href="?portion=<c:out value="${requestScope.currentPortion-1}"/>">&laquo;</a>
+            </li>
+            <c:forEach begin="1" end="${requestScope.countOfPortions}" var="i" step="1">
+                <c:choose>
+                    <c:when test="${i!=requestScope.currentPortion}">
+                        <li class="page-item">
+                            <a class="page-link" href="?portion=<c:out value="${i}"/>"><c:out value="${i}"/></a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item active">
+                            <a class="page-link"><c:out value="${i}"/></a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+            <li class="page-item <c:if test="${requestScope.currentPortion+1>requestScope.countOfPortions}"> <c:out value="disabled"/></c:if>" >
+                <a class="page-link" href="?portion=<c:out value="${requestScope.currentPortion+1}"/>">&raquo;</a>
+            </li>
+        </ul>
+    </div>
 
 </div>
 

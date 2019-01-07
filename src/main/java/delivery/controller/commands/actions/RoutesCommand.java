@@ -17,11 +17,11 @@ public class RoutesCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-       int pSize = Integer.parseInt(ConfigurationManager.getProperty("page_portion"));
+       int portionSize = Integer.parseInt(ConfigurationManager.getProperty("page_portion"));
 
         List<Route> routeList = routeService.getAllRoutes();
 
-        int countOfPortions = (routeList.size() % pSize > 0) ? routeList.size() / pSize + 1 : routeList.size() / pSize ;
+        int countOfPortions = (routeList.size() % portionSize > 0) ? routeList.size() / portionSize + 1 : routeList.size() / portionSize ;
 
         int portion =1;
 
@@ -31,9 +31,9 @@ public class RoutesCommand implements Command {
         catch (NumberFormatException ignored){
         }
 
-        int start = (portion-1)*pSize;
+        int start = (portion-1)*portionSize;
 
-        int end = Math.min(start+pSize, routeList.size());
+        int end = Math.min(start+portionSize, routeList.size());
 
         request.setAttribute("routeList", routeList.subList(start,  end) );
         request.setAttribute("currentPortion", portion);

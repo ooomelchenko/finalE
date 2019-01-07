@@ -185,7 +185,7 @@
                     <select class="custom-select" id="orderType">
                         <c:forEach var="orderType" items="${requestScope.orderTypes}">
                             <option value="${orderType.name()}">
-                                    ${orderType.name()}
+                                <fmt:message key="${orderType.getBundle()}"/>
                             </option>
                         </c:forEach>
                     </select>
