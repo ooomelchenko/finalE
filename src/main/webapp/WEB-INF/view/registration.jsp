@@ -86,25 +86,20 @@
                 <a href="?sessionLocale=ua"><img src="${pageContext.request.contextPath}/resources/icons/ua.png"><fmt:message key="lang.ua"/></a>
             </div>
 
+            <div style="text-align: left" id="div_messages">
+                <p class="text-success"> <c:out value="${requestScope.resultMessage}"/></p>
+                <a href="${pageContext.request.contextPath}/delivery/login">
+                    <img src="${pageContext.request.contextPath}/resources/icons/login.png" style="width: 30px; height: 30px">
+                    <fmt:message key="input.login"/>
+                </a>
+            </div>
+
             <div class="panel">
                 <h2><fmt:message key="registration.head"/></h2>
                 <p><fmt:message key="registration.hello"/></p>
             </div>
 
             <form method="POST">
-
-                <div class="form-group">
-                    <label style="width: 100%">
-                        <select name="role">
-                            <c:forEach var="role" items="${enumRoles}">
-                                <option value="${role.name()}"
-                                        <c:if test="${role.name()}=${requestScope.userDTO.getRole().name()}">selected="selected"</c:if> >
-                                    <c:out value="${role.name()}"/>
-                                </option>
-                            </c:forEach>
-                        </select>
-                    </label>
-                </div>
 
                 <div class="form-group">
                     <input class="form-control" name="login" type="text"

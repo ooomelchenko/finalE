@@ -16,21 +16,7 @@ public class User {
     private Role role = Role.GUEST;
     private List<Order> orders = new ArrayList<>();
 
-    public enum Role {
-        GUEST("WEB-INF/view/index.jsp"){},
-        USER("user:redirect"){},
-        ADMIN("admin:redirect"){};
-
-        private String roleBasePath;
-
-        public String getRoleBasePath() {
-            return roleBasePath;
-        }
-
-        Role(String path){
-            roleBasePath = path;
-        }
-    }
+    public enum Role {GUEST, USER, ADMIN}
 
     public User() {
     }

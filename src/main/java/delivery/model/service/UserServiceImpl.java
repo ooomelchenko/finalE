@@ -1,9 +1,9 @@
 package delivery.model.service;
 
-import delivery.util.bundleManagers.RegexManager;
 import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.dao.UserDao;
 import delivery.model.entity.User;
+import delivery.util.bundleManagers.RegexManager;
 
 import java.util.List;
 import java.util.Map;
@@ -53,9 +53,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(String login, String pass, String firstName, String lastName, String email, String role) {
+    public User create(String login, String pass, String firstName, String lastName, String email, User.Role role) {
         try (UserDao userDao = daoFactoryAbst.createUserDao()) {
-            userDao.create(new User(login, pass, firstName, lastName, email, User.Role.valueOf(role)));
+            userDao.create(new User(login, pass, firstName, lastName, email, User.Role.USER));
         }
         return null;
     }

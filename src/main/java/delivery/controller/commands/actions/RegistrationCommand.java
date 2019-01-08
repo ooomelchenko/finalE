@@ -8,7 +8,6 @@ import delivery.util.bundleManagers.ContentManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,16 +23,14 @@ public class RegistrationCommand implements Command {
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
         String email = request.getParameter("email");
-        String role = request.getParameter("role");
+
 
         if (login == null) {
-            request.setAttribute("enumRoles", Arrays.stream(User.Role.values())
-                    .filter(r -> !r.name().equals("GUEST"))
-                    .toArray());
             return "/WEB-INF/view/registration.jsp";
         }
 
         Map<String, String> fieldsMap = new ConcurrentHashMap<>();
+
         fieldsMap.put("login", login);
         fieldsMap.put("password", password);
         fieldsMap.put("firstname", firstname);
@@ -43,18 +40,21 @@ public class RegistrationCommand implements Command {
         String lang = (String) request.getSession().getAttribute("lang");
 
         Map<String, String> wrongFields = userService.validateFields(fieldsMap);
+
         if (wrongFields.isEmpty()) {
-            userService.create(login, password, firstname, lastname, email, role);
-            request.setAttribute("message", ContentManager.getProperty("registration.success", lang));
-            return "login:redirect";
+
+            userService.create(login, password, firstname, lastname, email, User.Role.USER);
+            request.setAttribute("resultMessage", ContentManager.getProperty("registration.success", lang));
+
+            return "/WEB-INF/view/registration.jsp";
         } else {
             for (String field : wrongFields.keySet()) {
+
                 request.setAttribute("wrong_"+field, ContentManager.getProperty("wrong."+field, lang));
+
             }
-            request.setAttribute("userDTO", new User(login, password, firstname, lastname, email, User.Role.valueOf(role)));
-            request.setAttribute("enumRoles", Arrays.stream(User.Role.values())
-                    .filter(r -> !r.name().equals("GUEST"))
-                    .toArray());
+            request.setAttribute("userDTO", new User(login, password, firstname, lastname, email, User.Role.USER));
+
             return "/WEB-INF/view/registration.jsp";
         }
 

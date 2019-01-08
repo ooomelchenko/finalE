@@ -9,6 +9,7 @@ import delivery.util.bundleManagers.ConfigurationManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 
 public class RoutesCommand implements Command {
 
@@ -17,26 +18,22 @@ public class RoutesCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-       int portionSize = Integer.parseInt(ConfigurationManager.getProperty("page_portion"));
+        int portionSize = Integer.parseInt(ConfigurationManager.getProperty("page_portion"));
 
         List<Route> routeList = routeService.getAllRoutes();
 
-        int countOfPortions = (routeList.size() % portionSize > 0) ? routeList.size() / portionSize + 1 : routeList.size() / portionSize ;
+        int countOfPortions =(int)Math.ceil((float)routeList.size() / portionSize);
 
-        int portion =1;
+        int portions = Integer.parseInt(Optional.ofNullable(request.getParameter("portion")).orElse("1"));
 
-        try {
-            portion = Math.min(Integer.parseInt(request.getParameter("portion")),countOfPortions) ;
-        }
-        catch (NumberFormatException ignored){
-        }
+        int currentPortion = Math.min(portions, countOfPortions) ;
 
-        int start = (portion-1)*portionSize;
+        int start = (currentPortion-1)*portionSize;
 
         int end = Math.min(start+portionSize, routeList.size());
 
         request.setAttribute("routeList", routeList.subList(start,  end) );
-        request.setAttribute("currentPortion", portion);
+        request.setAttribute("currentPortion", currentPortion);
         request.setAttribute("countOfPortions", countOfPortions);
 
         return "/WEB-INF/view/routesList.jsp";
