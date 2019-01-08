@@ -104,11 +104,10 @@ public class TariffDaoImpl implements TariffDao {
 
         try(PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("tariff.update"))){
 
-            st.setString(1, tariff.getName());
-            st.setLong(2, tariff.getCostPerKm());
-            st.setLong(3, tariff.getCostPerKg());
-            st.setLong(4, tariff.getPaceDayKm());
-            st.setLong(5, tariff.getId());
+            st.setLong(1, tariff.getCostPerKm());
+            st.setLong(2, tariff.getCostPerKg());
+            st.setLong(3, tariff.getPaceDayKm());
+            st.setLong(4, tariff.getId());
 
             return st.executeUpdate()>0;
 

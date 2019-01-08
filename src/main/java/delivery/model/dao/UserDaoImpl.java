@@ -23,7 +23,17 @@ public class UserDaoImpl implements UserDao {
     @Override
     public long create(User user) {
 
-        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("user.createUser"), Statement.RETURN_GENERATED_KEYS)){
+        try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("user.createUser"),
+                Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement checkLoginPs = connection.prepareStatement(SqlQueryManager.getProperty("user.checkLogin"))
+        ){
+            checkLoginPs.setString(1, user.getLogin());
+            ResultSet checkRs = checkLoginPs.executeQuery();
+            checkRs.next();
+
+            if(checkRs.getInt(1)>0){
+                return 0;
+            }
 
             ps.setString(1, user.getLogin());
             ps.setString( 2, user.getPassword());
@@ -39,7 +49,8 @@ public class UserDaoImpl implements UserDao {
 
             return rs.getLong(1);
 
-        }catch (SQLException e){
+        }
+        catch (SQLException e){
             e.printStackTrace();
             return 0;
         }

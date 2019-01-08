@@ -2,6 +2,7 @@ package delivery.controller;
 
 import delivery.controller.commands.ActionFactory;
 import delivery.controller.commands.Command;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,11 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @WebServlet(urlPatterns = "/delivery/*")
 public class Servlet extends HttpServlet {
-    //private final static Logger log = Logger.getLogger(Servlet.class);
 
+    private static final Logger log = Logger.getLogger(Servlet.class);
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
+        log.info("Servlet init");
         servletConfig.getServletContext().setAttribute("loggedUsers", new ConcurrentHashMap<String, HttpSession>());
     }
 
