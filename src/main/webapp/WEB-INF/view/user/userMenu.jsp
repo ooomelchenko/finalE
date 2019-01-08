@@ -13,17 +13,19 @@
     $(document).ready(function () {
 
         $('.button_pay').click(function () {
-            $(this).hide();
+            var button_pay = $(this);
+
+            button_pay.hide();
             $.ajax({
                 url: "${pageContext.request.contextPath}/delivery/user/bill/pay",
                 method: "POST",
-                data: {billId: $(this).val()},
+                data: {billId: button_pay.val()},
 
                 success: function () {
                     location.reload();
                 },
                 error: function () {
-                    $(this).parent().append('<span class="badge badge-success"><fmt:message key="badge.paid"/></span>');
+                    button_pay.parent().append('<span class="badge badge-danger"><fmt:message key="payment.error"/></span>');
                 }
             });
         })
@@ -99,7 +101,7 @@
                 </tr>
                 <tr class="table-info">
                     <th scope="row"><fmt:message key="user.account.sum"/></th>
-                    <td><c:out value="${requestScope.userFull.getAccountSum()/100} "/></td>
+                    <td class="font-italic"><c:out value="${requestScope.userFull.getAccountSum()/100} "/></td>
                 </tr>
                 </tbody>
             </table>
@@ -112,23 +114,24 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col"><fmt:message key="order.table.head.date"/></th>
-                    <th scope="col"><fmt:message key="order.table.head.type"/></th>
-                    <th scope="col"><fmt:message key="order.table.head.weight"/></th>
-                    <th scope="col"><fmt:message key="order.table.head.route"/></th>
-                    <th scope="col"><fmt:message key="order.table.head.tariff.name"/></th>
-                    <th scope="col"><fmt:message key="order.table.head.bill.total"/></th>
+                    <th scope="col" class="col-2"><fmt:message key="order.table.head.date"/></th>
+                    <th scope="col" class="col-2"><fmt:message key="order.table.head.type"/></th>
+                    <th scope="col" class="col-2"><fmt:message key="order.table.head.weight"/></th>
+                    <th scope="col" class="col-2"><fmt:message key="order.table.head.route"/></th>
+                    <th scope="col" class="col-2"><fmt:message key="order.table.head.tariff.name"/></th>
+                    <th scope="col" class="col-2"><fmt:message key="order.table.head.bill.total"/></th>
+                    <th scope="col" class="col-2"> </th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="order" items="${requestScope.userFull.getOrders()}">
                     <tr class="table-p">
                         <td><c:out value="${order.arrivalDate} "/></td>
-                        <td><c:out value="${order.type} "/></td>
+                        <td><fmt:message key="${order.type.getBundle()}"/></td>
                         <td><c:out value="${order.weightGr/1000} "/></td>
                         <td><c:out value="${order.availableOption.route.routeStart}-${order.availableOption.route.routeEnd} "/></td>
                         <td><c:out value="${order.availableOption.tariff.name}"/></td>
-                        <td><c:out value="${order.bill.total/100} "/></td>
+                        <td class="font-italic"><c:out value="${order.bill.total/100} "/></td>
                         <c:if test="${order.bill.isPaid() == false}">
                             <td>
                                 <button value="${order.bill.id}" class="button_pay btn btn-outline-success btn-sm"><fmt:message key="button.pay"/></button>

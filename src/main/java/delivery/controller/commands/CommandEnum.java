@@ -11,7 +11,7 @@ public enum CommandEnum {
     LOGIN ("LOGIN", new LoginCommand()) {},
     REGISTRATION("REGISTRATION", new RegistrationCommand()){},
     LOGOUT ("LOGOUT", new LogoutCommand()) {},
-    REGISTRATIONVALID("REGISTRATIONVALID", new RegistrationValidCommand()){},
+  //  REGISTRATIONVALID("REGISTRATIONVALID", new RegistrationValidCommand()){},
     USER ("USER", new UserCommand()) {},
     ADMIN ("ADMIN", new AdminCommand()) {},
     ROUTES ("ROUTES", new RoutesCommand()) {},

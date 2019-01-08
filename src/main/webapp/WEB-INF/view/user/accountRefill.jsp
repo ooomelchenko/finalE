@@ -17,13 +17,13 @@
                 $('[data-toggle="popover"]').popover()
             });
 
-            $("#payment-button").click(function (e) {
+            $("#payment-button").click(function () {
 
                     $(this).hide();
                     $.ajax({
                         url: "${pageContext.request.contextPath}/delivery/user/account/refill",
                         method: "POST",
-                        data: {payment: $('#cc-payment').val().replace(".", "")},
+                        data: {payment: $('#cc-payment').val()*100},
 
                         success: function () {
                             $('#div_success_message').show();
@@ -115,7 +115,7 @@
                         </div>
                         <div class="form-group">
                             <label for="cc-payment" class="control-label mb-1">Payment amount</label>
-                            <input id="cc-payment" name="cc-payment" type="text" class="form-control" aria-required="true" aria-invalid="false" required value="100.00">
+                            <input id="cc-payment" name="cc-payment" type="number" min="0" step="0.01" class="form-control" aria-required="true" aria-invalid="false" required value="100.00">
                             <span class="invalid-feedback">Enter the payment amount</span>
                         </div>
                         <div class="form-group">
