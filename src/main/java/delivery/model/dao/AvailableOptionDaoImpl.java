@@ -27,24 +27,26 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
             ps.setLong(2, option.getRoute().getId());
             ps.setLong(3, option.getTariff().getId());
 
-            ps.execute();
+            ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
 
             if(rs.next()){
                 option.setId(rs.getLong(1));
+                return option;
             }
-            return option;
+            else
+            return null;
         }
         catch (SQLException e){
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
     }
 
     @Override
-    public int updateOrInsert(List<AvailableOption> optionList){
+    public boolean updateOrInsert(List<AvailableOption> optionList){
 
         try( PreparedStatement updateStatement = connection.prepareStatement(SqlQueryManager.getProperty("option.update.byRouteTariffId"));
                 PreparedStatement insertStatement = connection.prepareStatement(SqlQueryManager.getProperty("option.create")) ) {
@@ -76,15 +78,18 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
                 connection.commit();
 
-                return i;
+                return true;
             }
+            else{
 
+                connection.rollback();
 
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return 0;
     }
 
     @Override
@@ -100,13 +105,13 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
             if(rs.next())
                 return mapper.extractFromResultSet(rs);
+            else
+                return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     @Override
@@ -136,7 +141,7 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -168,7 +173,7 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
 
     }
@@ -205,7 +210,7 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
             return availableOption;
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 }

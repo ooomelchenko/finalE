@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    long create(Order order);
+    Order create(Order order);
 
     List<Order> findByUserId(long idUser);
 }

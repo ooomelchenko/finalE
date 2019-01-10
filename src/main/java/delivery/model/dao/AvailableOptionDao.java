@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AvailableOptionDao extends GenericDao<AvailableOption> {
 
-    int updateOrInsert(List<AvailableOption> optionList);
+    boolean updateOrInsert(List<AvailableOption> optionList);
 
     AvailableOption findByRouteTariffId(long id_route, long id_tariff);
 }

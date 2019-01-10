@@ -39,6 +39,10 @@ public class OrderDaoImpl implements OrderDao {
             if(rs.next()){
                 order.setId(rs.getLong(1));
             }
+            else {
+                connection.rollback();
+                throw new RuntimeException();
+            }
 
             stBill.setLong(1, order.getBill().getTotal());
             stBill.setBoolean(2, order.getBill().isPaid());
@@ -52,6 +56,10 @@ public class OrderDaoImpl implements OrderDao {
             if(billRs.next()){
                 order.getBill().setId(rs.getLong(1));
             }
+            else {
+                connection.rollback();
+                throw new RuntimeException();
+            }
 
             connection.commit();
 
@@ -63,7 +71,6 @@ public class OrderDaoImpl implements OrderDao {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
 

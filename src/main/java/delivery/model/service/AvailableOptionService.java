@@ -10,9 +10,9 @@ public interface AvailableOptionService {
 
     Optional<AvailableOption> getAvailableOption(long id);
 
-    long create(AvailableOption availableOption);
+    AvailableOption create(AvailableOption availableOption);
 
     Optional<AvailableOption> getByRouteTariffId(long id_route, long id_tariff);
 
-    int updateOrInsert(List<AvailableOption> optionList);
+    boolean updateOrInsert(List<AvailableOption> optionList);
 }

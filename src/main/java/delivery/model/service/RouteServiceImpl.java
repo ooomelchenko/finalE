@@ -27,14 +27,14 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public long create(Route route) {
+    public Route create(Route route) {
         try (RouteDao dao = daoFactoryAbst.createRouteDao()) {
            return dao.create(route);
         }
     }
 
     @Override
-    public long createWithLocalFields(RouteLocale routeLocale){
+    public RouteLocale createWithLocalFields(RouteLocale routeLocale){
         try (RouteDao dao = daoFactoryAbst.createRouteDao()) {
              return dao.createWithLocalFields(routeLocale);
         }

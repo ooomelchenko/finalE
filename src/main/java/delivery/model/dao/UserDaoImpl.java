@@ -40,8 +40,10 @@ public class UserDaoImpl implements UserDao {
 
             if(rs.next()){
                 user.setId(rs.getLong(1));
+                return user;
             }
-            return user;
+            else
+                return null;
         }
         catch (SQLIntegrityConstraintViolationException e){
             throw new NotUniqUserException("User with such name already exist");
@@ -50,6 +52,7 @@ public class UserDaoImpl implements UserDao {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+
     }
 
     @Override

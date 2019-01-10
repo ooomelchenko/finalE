@@ -11,7 +11,7 @@ public class OrderServiceImpl implements OrderService {
     private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();
 
     @Override
-    public long create(Order order) {
+    public Order create(Order order) {
         try (OrderDao dao = daoFactoryAbst.createOrderDao()) {
            return dao.create(order);
         }

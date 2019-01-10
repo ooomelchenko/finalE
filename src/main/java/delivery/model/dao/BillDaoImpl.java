@@ -169,17 +169,18 @@ public class BillDaoImpl implements BillDao {
             stBill.setLong(1, bill.getId());
             stBill.executeUpdate();
 
-            if(rs.next() && rs.getLong("account_sum") <0){
-
-                connection.rollback();
-
-                throw new NotEnoughMoneyException("not enought money on account to settleUp bill");
-            }
             if(resultSet.next() && resultSet.getBoolean("is_paid")){
 
                 connection.rollback();
 
                 throw new SettleUpDuplicationException("bill is already paid");
+            }
+
+            if(rs.next() && rs.getLong("account_sum") <0){
+
+                connection.rollback();
+
+                throw new NotEnoughMoneyException("not enought money on account to settleUp bill");
             }
 
             else{

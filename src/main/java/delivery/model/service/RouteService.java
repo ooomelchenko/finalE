@@ -12,7 +12,7 @@ public interface RouteService {
 
     Optional<Route> getRoute(long id);
 
-    long create(Route route);
+    Route create(Route route);
 
-    long createWithLocalFields(RouteLocale routeLocale);
+    RouteLocale createWithLocalFields(RouteLocale routeLocale);
 }
