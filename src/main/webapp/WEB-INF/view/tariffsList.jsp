@@ -78,12 +78,12 @@
 
 <div class="jumbotron">
 
-    <table class="table table-hover">
+    <table class="table table-hover col-md-8">
         <thead>
         <tr>
-            <th scope="col"><fmt:message key="tariff.table.head.name"/></th>
-            <th scope="col"><fmt:message key="tariff.table.head.costPerKm"/></th>
-            <th scope="col"><fmt:message key="tariff.table.head.costPerKg"/></th>
+            <th scope="col" class="col-4"><fmt:message key="tariff.table.head.name"/></th>
+            <th scope="col" class="col-4"><fmt:message key="tariff.table.head.costPerKm"/></th>
+            <th scope="col" class="col-4"><fmt:message key="tariff.table.head.costPerKg"/></th>
         </tr>
         </thead>
         <tbody>

@@ -1,5 +1,6 @@
 package delivery.model.dao;
 
+import delivery.controller.exceptions.NotUniqUserException;
 import delivery.model.dao.mapper.OrderMapper;
 import delivery.model.dao.mapper.UserMapper;
 import delivery.model.entity.Order;
@@ -21,19 +22,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public long create(User user) {
+    public User create(User user) {
 
         try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("user.createUser"),
-                Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement checkLoginPs = connection.prepareStatement(SqlQueryManager.getProperty("user.checkLogin"))
-        ){
-            checkLoginPs.setString(1, user.getLogin());
-            ResultSet checkRs = checkLoginPs.executeQuery();
-            checkRs.next();
-
-            if(checkRs.getInt(1)>0){
-                return 0;
-            }
+                Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, user.getLogin());
             ps.setString( 2, user.getPassword());
@@ -45,47 +37,54 @@ public class UserDaoImpl implements UserDao {
             ps.execute();
 
             ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
 
-            return rs.getLong(1);
-
+            if(rs.next()){
+                user.setId(rs.getLong(1));
+            }
+            return user;
+        }
+        catch (SQLIntegrityConstraintViolationException e){
+            throw new NotUniqUserException("User with such name already exist");
         }
         catch (SQLException e){
             e.printStackTrace();
-            return 0;
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public User findById(long id) {
 
-        UserMapper userMapper = new UserMapper();
+        UserMapper mapper = new UserMapper();
 
         try (PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("user.findById"))) {
 
             ps.setLong(1, id);
 
             ResultSet rs = ps.executeQuery();
-            rs.next();
 
-            return userMapper.extractFromResultSet(rs);
+            if(rs.next())
+            return mapper.extractFromResultSet(rs);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+           throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     @Override
     public List<User> findAll() {
+
         Map<Long, User> userMap = new HashMap<>();
-        Map<Long, Order> orderMap = new HashMap<>();
+
+        UserMapper userMapper = new UserMapper();
+        OrderMapper orderMapper = new OrderMapper();
 
         try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("user.findAll"));
 
-            UserMapper userMapper = new UserMapper();
-            OrderMapper orderMapper = new OrderMapper();
+            ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("user.findAll"));
 
             while (rs.next()) {
                 User user = userMapper
@@ -94,16 +93,17 @@ public class UserDaoImpl implements UserDao {
                         .extractFromResultSet(rs);
                 user = userMapper
                         .makeUnique(userMap, user);
-                order = orderMapper
-                        .makeUnique(orderMap, order);
 
                 user.getOrders().add(order);
             }
+
             return new ArrayList<>(userMap.values());
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
+
     }
 
     @Override
@@ -123,7 +123,7 @@ public class UserDaoImpl implements UserDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -138,7 +138,7 @@ public class UserDaoImpl implements UserDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -162,14 +162,16 @@ public class UserDaoImpl implements UserDao {
             ps.setString( 2, password);
 
             ResultSet rs = ps.executeQuery();
-            rs.next();
 
-            return mapper.extractFromResultSet(rs);
+            if(rs.next())
+                return mapper.extractFromResultSet(rs);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     @Override
@@ -184,7 +186,7 @@ public class UserDaoImpl implements UserDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 }

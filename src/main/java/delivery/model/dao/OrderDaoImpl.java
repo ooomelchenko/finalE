@@ -19,10 +19,10 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public long create(Order order) {
+    public Order create(Order order) {
 
         try(PreparedStatement stOrder = connection.prepareStatement(SqlQueryManager.getProperty("order.create"), Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement stBill = connection.prepareStatement(SqlQueryManager.getProperty("bill.create"))){
+            PreparedStatement stBill = connection.prepareStatement(SqlQueryManager.getProperty("bill.create"), Statement.RETURN_GENERATED_KEYS)){
 
             connection.setAutoCommit(false);
 
@@ -35,21 +35,27 @@ public class OrderDaoImpl implements OrderDao {
             stOrder.executeUpdate();
 
             ResultSet rs = stOrder.getGeneratedKeys();
-            rs.next();
 
-            long orderId = rs.getLong(1);
+            if(rs.next()){
+                order.setId(rs.getLong(1));
+            }
 
             stBill.setLong(1, order.getBill().getTotal());
             stBill.setBoolean(2, order.getBill().isPaid());
             stBill.setLong(3, order.getUser().getId());
-            stBill.setLong(4, orderId);
+            stBill.setLong(4, order.getId());
 
-            if(stBill.executeUpdate()>0){
+            stBill.executeUpdate();
 
-                connection.commit();
-                return orderId;
+            ResultSet billRs = stBill.getGeneratedKeys();
+
+            if(billRs.next()){
+                order.getBill().setId(rs.getLong(1));
             }
 
+            connection.commit();
+
+            return order;
         }
         catch (SQLException e){
             try {
@@ -58,8 +64,9 @@ public class OrderDaoImpl implements OrderDao {
                 e1.printStackTrace();
             }
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return 0;
+
     }
 
     @Override
@@ -73,14 +80,15 @@ public class OrderDaoImpl implements OrderDao {
 
             ResultSet rs = ps.executeQuery();
 
-            rs.next();
-
-            return mapper.extractFromResultSet(rs);
+            if(rs.next())
+                return mapper.extractFromResultSet(rs);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     @Override
@@ -115,9 +123,10 @@ public class OrderDaoImpl implements OrderDao {
             }
 
             return orderList;
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -130,11 +139,11 @@ public class OrderDaoImpl implements OrderDao {
             ps.setInt(2, order.getWeightGr());
             ps.setDate(3, Date.valueOf(order.getArrivalDate()));
 
-            return (ps.executeUpdate()>0);
+            return ps.executeUpdate()>0;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
 
     }
@@ -146,11 +155,11 @@ public class OrderDaoImpl implements OrderDao {
 
             ps.setLong(1, id);
 
-            return (ps.executeUpdate()>0);
+            return ps.executeUpdate()>0;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -191,9 +200,10 @@ public class OrderDaoImpl implements OrderDao {
             }
 
             return new ArrayList<>(orderMap.values());
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 

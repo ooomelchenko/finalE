@@ -17,7 +17,7 @@ public class TariffDaoImpl implements TariffDao {
     }
 
     @Override
-    public long create(Tariff tariff) {
+    public Tariff create(Tariff tariff) {
 
         try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("tariff.create"), Statement.RETURN_GENERATED_KEYS)){
 
@@ -29,53 +29,62 @@ public class TariffDaoImpl implements TariffDao {
             ps.execute();
 
             ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
 
-            return rs.getLong(1);
+            if(rs.next()){
+                tariff.setId(rs.getLong(1));
+            }
+            return tariff;
         }
         catch (SQLException e){
             e.printStackTrace();
-            return 0;
+            throw new RuntimeException(e);
         }
-
     }
 
     @Override
     public Tariff findById(long id) {
 
-        TariffMapper tariffMapper = new TariffMapper();
+        TariffMapper mapper = new TariffMapper();
 
         try (PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("tariff.findById"))) {
 
             st.setLong(1, id);
 
             ResultSet rs = st.executeQuery();
-            rs.next();
 
-            return tariffMapper.extractFromResultSet(rs);
+            if(rs.next())
+                return mapper.extractFromResultSet(rs);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     @Override
     public List<Tariff> findAll() {
 
         List<Tariff> tariffList = new ArrayList<>();
+
         TariffMapper tariffMapper = new TariffMapper();
 
         try (Statement st = connection.createStatement()) {
 
             ResultSet rs = st.executeQuery(SqlQueryManager.getProperty("tariff.findAll"));
+
             while (rs.next()) {
                 tariffList.add(tariffMapper.extractFromResultSet(rs));
             }
+
             return tariffList;
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
+
     }
 
     @Override
@@ -92,10 +101,12 @@ public class TariffDaoImpl implements TariffDao {
             while (rs.next()) {
                 tariffList.add(tariffMapper.extractFromResultSet(rs));
             }
+
             return tariffList;
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -113,7 +124,7 @@ public class TariffDaoImpl implements TariffDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -128,7 +139,7 @@ public class TariffDaoImpl implements TariffDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 

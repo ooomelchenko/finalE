@@ -3,7 +3,7 @@ package delivery.model.dao;
 import java.util.List;
 
 public interface GenericDao<T> extends AutoCloseable {
-    long create (T entity);
+    T create (T entity);
     T findById(long id);
     List<T> findAll();
     boolean update(T entity);

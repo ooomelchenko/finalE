@@ -5,6 +5,6 @@ import delivery.model.entity.Route;
 
 public interface RouteDao extends GenericDao<Route> {
 
-    long createWithLocalFields(RouteLocale routeLocale);
+    RouteLocale createWithLocalFields(RouteLocale routeLocale);
 
 }

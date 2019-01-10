@@ -1,5 +1,7 @@
 package delivery.model.dao;
 
+import delivery.controller.exceptions.NotEnoughMoneyException;
+import delivery.controller.exceptions.SettleUpDuplicationException;
 import delivery.model.dao.mapper.BillMapper;
 import delivery.model.dao.mapper.UserMapper;
 import delivery.model.entity.Bill;
@@ -18,7 +20,7 @@ public class BillDaoImpl implements BillDao {
     }
 
     @Override
-    public long create(Bill bill) {
+    public Bill create(Bill bill) {
 
         try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("bill.create"), Statement.RETURN_GENERATED_KEYS)){
 
@@ -30,13 +32,15 @@ public class BillDaoImpl implements BillDao {
             ps.execute();
 
             ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
 
-            return rs.getLong(1);
+            if(rs.next()){
+                bill.setId(rs.getLong(1));
+            }
+            return bill;
         }
         catch (SQLException e){
             e.printStackTrace();
-            return 0;
+            throw new RuntimeException(e);
         }
 
     }
@@ -53,17 +57,20 @@ public class BillDaoImpl implements BillDao {
 
             ResultSet rs = ps.executeQuery();
 
-            rs.next();
+            if(rs.next()) {
 
-            Bill bill =  billMapper.extractFromResultSet(rs);
-            bill.setUser(userMapper.extractFromResultSet(rs));
+                Bill bill = billMapper.extractFromResultSet(rs);
+                bill.setUser(userMapper.extractFromResultSet(rs));
 
-            return bill;
+                return bill;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     @Override
@@ -90,7 +97,7 @@ public class BillDaoImpl implements BillDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -107,7 +114,7 @@ public class BillDaoImpl implements BillDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
 
     }
@@ -123,7 +130,7 @@ public class BillDaoImpl implements BillDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -155,29 +162,41 @@ public class BillDaoImpl implements BillDao {
 
             stUserCheck.setLong(1, userId);
             ResultSet rs = stUserCheck.executeQuery();
-            rs.next();
-            long accountResidual = rs.getLong("account_sum");
 
             stBillCheck.setLong(1, bill.getId());
             ResultSet resultSet = stBillCheck.executeQuery();
-            resultSet.next();
-            boolean isAlreadyPaid = resultSet.getBoolean("is_paid");
 
             stBill.setLong(1, bill.getId());
             stBill.executeUpdate();
 
-            if(accountResidual >=0 && !isAlreadyPaid){
+            if(rs.next() && rs.getLong("account_sum") <0){
+
+                connection.rollback();
+
+                throw new NotEnoughMoneyException("not enought money on account to settleUp bill");
+            }
+            if(resultSet.next() && resultSet.getBoolean("is_paid")){
+
+                connection.rollback();
+
+                throw new SettleUpDuplicationException("bill is already paid");
+            }
+
+            else{
                 connection.commit();
                 return true;
             }
-            else {
-                connection.rollback();
-                return false;
-            }
 
-        } catch (SQLException e) {
+        }
+
+        catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException esql) {
+                throw new RuntimeException(esql);
+            }
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
 
     }

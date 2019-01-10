@@ -22,7 +22,7 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public long create(Route route) {
+    public Route create(Route route) {
 
         try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("route.create"), Statement.RETURN_GENERATED_KEYS)){
 
@@ -33,39 +33,43 @@ public class RouteDaoImpl implements RouteDao {
             ps.execute();
 
             ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
 
-            return rs.getLong(1);
+            if(rs.next()){
+                route.setId(rs.getLong(1));
+            }
+            return route;
         }
         catch (SQLException e){
             e.printStackTrace();
-            return 0;
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public long createWithLocalFields(RouteLocale routeLocale){
+    public RouteLocale createWithLocalFields(RouteLocale routeLocalized){
 
-        RouteLocale.LocalFields uaFields = routeLocale.getLocalFieldsMap().get("ua");
+        RouteLocale.LocalFields uaFields = routeLocalized.getLocalFieldsMap().get("ua");
 
         try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("route.create.withLocalFields"))){
 
-            ps.setString(1, routeLocale.getRoute().getRouteStart());
-            ps.setString(2, routeLocale.getRoute().getRouteEnd());
-            ps.setInt(3, routeLocale.getRoute().getDistanceKm());
+            ps.setString(1, routeLocalized.getRoute().getRouteStart());
+            ps.setString(2, routeLocalized.getRoute().getRouteEnd());
+            ps.setInt(3, routeLocalized.getRoute().getDistanceKm());
             ps.setString(4, uaFields.getRouteStart());
             ps.setString(5, uaFields.getRouteEnd());
 
             ps.execute();
 
             ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
 
-            return rs.getLong(1);
+            if(rs.next()){
+                routeLocalized.getRoute().setId(rs.getLong(1));
+            }
+            return routeLocalized;
         }
         catch (SQLException e){
             e.printStackTrace();
-            return 0;
+            throw new RuntimeException(e);
         }
     }
 
@@ -79,15 +83,16 @@ public class RouteDaoImpl implements RouteDao {
             st.setLong(1, id);
 
             ResultSet rs = st.executeQuery();
-            rs.next();
 
-            return routeMapper.extractFromResultSet(rs);
+            if(rs.next())
+                return routeMapper.extractFromResultSet(rs);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
 
+        return null;
     }
 
     @Override
@@ -116,7 +121,7 @@ public class RouteDaoImpl implements RouteDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -133,7 +138,7 @@ public class RouteDaoImpl implements RouteDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -148,7 +153,7 @@ public class RouteDaoImpl implements RouteDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 

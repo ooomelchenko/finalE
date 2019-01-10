@@ -19,7 +19,7 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
     }
 
     @Override
-    public long create(AvailableOption option) {
+    public AvailableOption create(AvailableOption option) {
 
         try(PreparedStatement ps = connection.prepareStatement(SqlQueryManager.getProperty("option.create"), Statement.RETURN_GENERATED_KEYS)){
 
@@ -30,12 +30,15 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
             ps.execute();
 
             ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
 
-            return rs.getLong(1);
-
-        } catch (SQLException e) {
-            return 0;
+            if(rs.next()){
+                option.setId(rs.getLong(1));
+            }
+            return option;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException();
         }
 
     }
@@ -87,7 +90,7 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
     @Override
     public AvailableOption findById(long id) {
 
-        AvailableOptionMapper availableOptionMapper = new AvailableOptionMapper();
+        AvailableOptionMapper mapper = new AvailableOptionMapper();
 
         try (PreparedStatement st = connection.prepareStatement(SqlQueryManager.getProperty("option.findById"))) {
 
@@ -95,14 +98,15 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
             ResultSet rs = st.executeQuery();
 
-            rs.next();
-
-            return availableOptionMapper.extractFromResultSet(rs);
+            if(rs.next())
+                return mapper.extractFromResultSet(rs);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException();
         }
+
+        return null;
     }
 
     @Override
@@ -132,7 +136,7 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException();
         }
     }
 
