@@ -1,9 +1,9 @@
 package delivery.controller.commands.actions;
 
 import delivery.controller.commands.Command;
+import delivery.controller.exceptions.NotUniqUserException;
 import delivery.model.entity.User;
 import delivery.model.service.UserService;
-import delivery.model.service.UserServiceImpl;
 import delivery.util.bundleManagers.ContentManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RegistrationCommand implements Command {
 
-    private UserService userService = new UserServiceImpl();
+    private UserService userService;
+
+    public RegistrationCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -23,7 +27,6 @@ public class RegistrationCommand implements Command {
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
         String email = request.getParameter("email");
-
 
         if (login == null) {
             return "/WEB-INF/view/registration.jsp";
@@ -42,11 +45,19 @@ public class RegistrationCommand implements Command {
         Map<String, String> wrongFields = userService.validateFields(fieldsMap);
 
         if (wrongFields.isEmpty()) {
-
-            userService.create(login, password, firstname, lastname, email, User.Role.USER);
-            request.setAttribute("resultMessage", ContentManager.getProperty("registration.success", lang));
+            try {
+                userService.create(login, password, firstname, lastname, email, User.Role.USER);
+                request.setAttribute("resultMessage", ContentManager.getProperty("registration.success", lang));
+            }
+            catch (NotUniqUserException e){
+                request.setAttribute("wrong_login", ContentManager.getProperty("registration.exception.notUniqUser", lang));
+            }
+            catch (RuntimeException re){
+                request.setAttribute("resultMessage", ContentManager.getProperty("exception.runtime", lang));
+            }
 
             return "/WEB-INF/view/registration.jsp";
+
         } else {
             for (String field : wrongFields.keySet()) {
 

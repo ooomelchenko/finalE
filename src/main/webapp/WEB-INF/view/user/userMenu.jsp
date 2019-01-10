@@ -24,8 +24,8 @@
                 success: function () {
                     location.reload();
                 },
-                error: function () {
-                    button_pay.parent().append('<span class="badge badge-danger"><fmt:message key="payment.error"/></span>');
+                error: function (e) {
+                    button_pay.parent().append('<span class="badge badge-danger">'+e.responseText+'</span>');
                 }
             });
         })

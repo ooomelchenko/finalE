@@ -2,31 +2,30 @@ package delivery.controller.commands;
 
 import delivery.controller.commands.actions.*;
 import delivery.controller.exceptions.WrongCommandException;
+import delivery.model.service.*;
 
 public enum CommandEnum {
 
     PROFILE ("PROFILE", new ProfileCommand()) {},
     EMPTY ("EMPTY", new EmptyCommand()) {},
- //   GUEST ("GUEST", new GuestCommand()) {},
-    LOGIN ("LOGIN", new LoginCommand()) {},
-    REGISTRATION("REGISTRATION", new RegistrationCommand()){},
+    LOGIN ("LOGIN", new LoginCommand(new UserServiceImpl())) {},
+    REGISTRATION("REGISTRATION", new RegistrationCommand(new UserServiceImpl())){},
     LOGOUT ("LOGOUT", new LogoutCommand()) {},
-  //  REGISTRATIONVALID("REGISTRATIONVALID", new RegistrationValidCommand()){},
-    USER ("USER", new UserCommand()) {},
-    ADMIN ("ADMIN", new AdminCommand()) {},
-    ROUTES ("ROUTES", new RoutesCommand()) {},
-    TARIFFS ("TARIFFS", new TariffsCommand()) {},
-    CALCULATOR ("CALCULATOR", new CalculatorCommand()) {},
-    CALCULATE ("CALCULATE", new CalculateDeliveryPriceCommand()) {},
-    TARIFFSBYROUTE("GETTARIFFLISTBYROUTE", new GetTariffListByRouteCommand()) {},
-    ORDERCREATOR("USER/ORDERCREATOR", new OrderCreatorCommand()),
-    CREATEORDER("USER/CREATEORDER", new CreateOrderCommand()),
+    USER ("USER", new UserCommand(new UserServiceImpl(), new OrderServiceImpl())) {},
+    ADMIN ("ADMIN", new AdminCommand(new TariffServiceImpl())) {},
+    ROUTES ("ROUTES", new RoutesCommand(new RouteServiceImpl())) {},
+    TARIFFS ("TARIFFS", new TariffsCommand(new TariffServiceImpl())) {},
+    CALCULATOR ("CALCULATOR", new CalculatorCommand(new RouteServiceImpl(), new TariffServiceImpl())) {},
+    CALCULATE ("CALCULATE", new CalculateDeliveryPriceAjaxCommand(new RouteServiceImpl(), new TariffServiceImpl(), new CalculatorServiceImpl())) {},
+    TARIFFSBYROUTE("GETTARIFFLISTBYROUTE", new GetTariffListByRouteAjaxCommand(new TariffServiceImpl())) {},
+    ORDERCREATOR("USER/ORDERCREATOR", new OrderCreatorCommand(new RouteServiceImpl(), new TariffServiceImpl())),
+    CREATEORDER("USER/CREATEORDER", new CreateOrderAjaxCommand(new CalculatorServiceImpl(), new OrderServiceImpl(), new AvailableOptionServiceImpl())),
     ACCOUNTINVOICE("USER/ACCOUNT/INVOICE", new AccountInvoiceCommand()),
-    ACCOUNTREFILL("USER/ACCOUNT/REFILL", new AccountRefillCommand()),
-    BILLPAY("USER/BILL/PAY", new BillPayCommand()),
-    ROUTESMANAGER ("ADMIN/ROUTES/MANAGER", new RoutesManagerCommand()) {},
-    TARIFFEDIT ("ADMIN/TARIFF/EDIT", new TariffEditCommand()) {},
-    OPTIONEDIT("ADMIN/OPTION/EDIT", new OptionEditCommand());
+    ACCOUNTREFILL("USER/ACCOUNT/REFILL", new AccountRefillAjaxCommand(new UserServiceImpl())),
+    BILLPAY("USER/BILL/PAY", new BillPayAjaxCommand(new BillServiceImpl())),
+    ROUTESMANAGER ("ADMIN/ROUTES/MANAGER", new RoutesManagerCommand(new RouteServiceImpl(), new TariffServiceImpl())) {},
+    TARIFFEDIT ("ADMIN/TARIFF/EDIT", new TariffEditAjaxCommand(new TariffServiceImpl())) {},
+    OPTIONEDIT("ADMIN/OPTION/EDIT", new OptionEditAjaxCommand(new AvailableOptionServiceImpl()));
 
     private String commandPath;
     private Command command;

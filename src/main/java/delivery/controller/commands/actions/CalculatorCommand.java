@@ -3,17 +3,20 @@ package delivery.controller.commands.actions;
 import delivery.controller.commands.Command;
 import delivery.model.entity.Order;
 import delivery.model.service.RouteService;
-import delivery.model.service.RouteServiceImpl;
 import delivery.model.service.TariffService;
-import delivery.model.service.TariffServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CalculatorCommand implements Command {
 
-    private RouteService routeService = new RouteServiceImpl();
-    private TariffService tariffService = new TariffServiceImpl();
+    private RouteService routeService;
+    private TariffService tariffService;
+
+    public CalculatorCommand(RouteService routeService, TariffService tariffService) {
+        this.routeService = routeService;
+        this.tariffService = tariffService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

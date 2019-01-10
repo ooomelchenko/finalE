@@ -5,7 +5,6 @@ import delivery.controller.exceptions.RoleAccessDeniedCommandException;
 import delivery.controller.exceptions.WrongCommandException;
 import delivery.model.entity.User;
 import delivery.model.service.UserService;
-import delivery.model.service.UserServiceImpl;
 import delivery.util.bundleManagers.ContentManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LoginCommand implements Command {
 
-    private UserService userService = new UserServiceImpl();
+    private UserService userService ;
+
+    public LoginCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws RoleAccessDeniedCommandException, WrongCommandException {

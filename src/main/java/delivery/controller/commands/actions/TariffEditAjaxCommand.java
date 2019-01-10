@@ -3,15 +3,18 @@ package delivery.controller.commands.actions;
 import delivery.controller.commands.Command;
 import delivery.model.entity.Tariff;
 import delivery.model.service.TariffService;
-import delivery.model.service.TariffServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-public class TariffEditCommand implements Command {
+public class TariffEditAjaxCommand implements Command {
 
-    TariffService tariffService = new TariffServiceImpl();
+    private TariffService tariffService;
+
+    public TariffEditAjaxCommand(TariffService tariffService) {
+        this.tariffService = tariffService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

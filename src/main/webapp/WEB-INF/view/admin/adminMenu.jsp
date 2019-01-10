@@ -19,8 +19,8 @@
                 url: "${pageContext.request.contextPath}/delivery/admin/tariff/edit",
                 method: "POST",
                 data: {tariffId: $(this).val(),
-                    costPerKm: tr_tariff_data.find('.costPerKm').val()*100,
-                    costPerKg: tr_tariff_data.find('.costPerKg').val()*100,
+                    costPerKm: (tr_tariff_data.find('.costPerKm').val()*100).toFixed(0),
+                    costPerKg: (tr_tariff_data.find('.costPerKg').val()*100).toFixed(0),
                     paceDayKm: tr_tariff_data.find('.paceDayKm').val()
                 },
 

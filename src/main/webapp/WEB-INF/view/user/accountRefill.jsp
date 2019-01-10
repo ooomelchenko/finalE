@@ -25,11 +25,13 @@
                         method: "POST",
                         data: {payment: $('#cc-payment').val()*100},
 
-                        success: function () {
+                        success: function (e) {
                             $('#div_success_message').show();
-                            },
-                        error: function () {
+                            $('#div_success_message').append("<span>"+e+"</span>");
+                        },
+                        error: function (e) {
                             $('#div_error_message').show();
+                            $('#div_error_message').append("<span>"+e.responseText+"</span>");
                         }
                     });
 
@@ -153,13 +155,13 @@
                                 <span id="payment-button-sending" style="display:none;">Sending…</span>
                             </button>
                             <div id="div_success_message" style="display: none" class="text-success">
-                                <span><fmt:message key="payment.success"/></span>
+
                                 <a href="${pageContext.request.contextPath}/delivery/profile" >
                                     <fmt:message key="nav.profile"/>
                                 </a>
                             </div>
                             <div id="div_error_message" style="display: none" class="text-danger">
-                                <span><fmt:message key="payment.error"/></span>
+
                                 <a href="${pageContext.request.contextPath}/delivery/profile" >
                                     <fmt:message key="nav.profile"/>
                                 </a>

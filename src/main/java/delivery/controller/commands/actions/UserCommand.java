@@ -3,9 +3,7 @@ package delivery.controller.commands.actions;
 import delivery.controller.commands.Command;
 import delivery.model.entity.User;
 import delivery.model.service.OrderService;
-import delivery.model.service.OrderServiceImpl;
 import delivery.model.service.UserService;
-import delivery.model.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +11,13 @@ import java.util.Optional;
 
 public class UserCommand implements Command {
 
-    private UserService userService = new UserServiceImpl();
-    private OrderService orderService = new OrderServiceImpl();
+    private UserService userService;
+    private OrderService orderService;
+
+    public UserCommand(UserService userService, OrderService orderService) {
+        this.userService = userService;
+        this.orderService = orderService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

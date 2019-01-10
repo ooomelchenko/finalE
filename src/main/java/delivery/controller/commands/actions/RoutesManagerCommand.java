@@ -3,9 +3,7 @@ package delivery.controller.commands.actions;
 import delivery.controller.commands.Command;
 import delivery.model.entity.Route;
 import delivery.model.service.RouteService;
-import delivery.model.service.RouteServiceImpl;
 import delivery.model.service.TariffService;
-import delivery.model.service.TariffServiceImpl;
 import delivery.util.bundleManagers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +13,13 @@ import java.util.Optional;
 
 public class RoutesManagerCommand implements Command {
 
-    private RouteService routeService = new RouteServiceImpl();
-    private TariffService tariffService = new TariffServiceImpl();
+    private RouteService routeService;
+    private TariffService tariffService;
+
+    public RoutesManagerCommand(RouteService routeService, TariffService tariffService) {
+        this.routeService = routeService;
+        this.tariffService = tariffService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

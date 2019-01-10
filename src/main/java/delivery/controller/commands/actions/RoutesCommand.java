@@ -3,7 +3,6 @@ package delivery.controller.commands.actions;
 import delivery.controller.commands.Command;
 import delivery.model.entity.Route;
 import delivery.model.service.RouteService;
-import delivery.model.service.RouteServiceImpl;
 import delivery.util.bundleManagers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +12,11 @@ import java.util.Optional;
 
 public class RoutesCommand implements Command {
 
-    private RouteService routeService = new RouteServiceImpl();
+    private RouteService routeService ;
+
+    public RoutesCommand(RouteService routeService) {
+        this.routeService = routeService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

@@ -4,16 +4,20 @@ import com.google.gson.Gson;
 import delivery.controller.commands.Command;
 import delivery.model.entity.Tariff;
 import delivery.model.service.TariffService;
-import delivery.model.service.TariffServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class GetTariffListByRouteCommand implements Command {
+public class GetTariffListByRouteAjaxCommand implements Command {
 
-    private TariffService tariffService = new TariffServiceImpl();
+    private TariffService tariffService;
+
+    public GetTariffListByRouteAjaxCommand(TariffService tariffService) {
+        this.tariffService = tariffService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -32,10 +36,9 @@ public class GetTariffListByRouteCommand implements Command {
 
                 writer.print(stringJson);
 
-            } catch (Exception e) {
+            } catch (IOException e) {
 
                 response.setStatus(500);
-                e.printStackTrace();
 
             }
 
