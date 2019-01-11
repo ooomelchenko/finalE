@@ -8,8 +8,10 @@ import delivery.util.bundleManagers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class RoutesManagerCommand implements Command {
 
@@ -26,7 +28,9 @@ public class RoutesManagerCommand implements Command {
 
         int portionSize = Integer.parseInt(ConfigurationManager.getProperty("page_portion"));
 
-        List<Route> routeList = routeService.getAllRoutes();
+        List<Route> routeList = routeService.getAllRoutes().stream()
+                .sorted(Comparator.comparing(Route::getRouteStart))
+                .collect(Collectors.toList());
 
         int countOfPortions =(int)Math.ceil((float)routeList.size() / portionSize);
 

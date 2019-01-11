@@ -7,8 +7,10 @@ import delivery.util.bundleManagers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class RoutesCommand implements Command {
 
@@ -23,13 +25,16 @@ public class RoutesCommand implements Command {
 
         int portionSize = Integer.parseInt(ConfigurationManager.getProperty("page_portion"));
 
-        List<Route> routeList = routeService.getAllRoutes();
+        List<Route> routeList = routeService.getAllRoutes()
+                .stream()
+                .sorted(Comparator.comparing(Route::getRouteStart))
+                .collect(Collectors.toList());
 
         int countOfPortions =(int)Math.ceil((float)routeList.size() / portionSize);
 
-        int portions = Integer.parseInt(Optional.ofNullable(request.getParameter("portion")).orElse("1"));
+        int portion = Integer.parseInt(Optional.ofNullable(request.getParameter("portion")).orElse("1"));
 
-        int currentPortion = Math.min(portions, countOfPortions) ;
+        int currentPortion = Math.min(portion, countOfPortions) ;
 
         int start = (currentPortion-1)*portionSize;
 

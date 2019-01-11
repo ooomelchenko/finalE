@@ -19,7 +19,6 @@ public class TariffEditAjaxCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-        try {
             long tariffId = Long.parseLong((request.getParameter("tariffId")));
             long costPerKm = Long.parseLong(request.getParameter("costPerKm"));
             long costPerKg = Long.parseLong(request.getParameter("costPerKg"));
@@ -43,11 +42,7 @@ public class TariffEditAjaxCommand implements Command {
             else
                 response.setStatus(501);
 
-        }
-        catch (NumberFormatException e){
-            response.setStatus(502);
-        }
-
         return null;
     }
 }
+

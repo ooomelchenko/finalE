@@ -22,11 +22,9 @@ public class RegistrationCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
+        String lang = (String) request.getSession().getAttribute("lang");
+
         String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        String firstname = request.getParameter("firstname");
-        String lastname = request.getParameter("lastname");
-        String email = request.getParameter("email");
 
         if (login == null) {
             return "/WEB-INF/view/registration.jsp";
@@ -35,24 +33,22 @@ public class RegistrationCommand implements Command {
         Map<String, String> fieldsMap = new ConcurrentHashMap<>();
 
         fieldsMap.put("login", login);
-        fieldsMap.put("password", password);
-        fieldsMap.put("firstname", firstname);
-        fieldsMap.put("lastname", lastname);
-        fieldsMap.put("email", email);
-
-        String lang = (String) request.getSession().getAttribute("lang");
+        fieldsMap.put("password", request.getParameter("password"));
+        fieldsMap.put("firstname", request.getParameter("firstname"));
+        fieldsMap.put("lastname", request.getParameter("lastname"));
+        fieldsMap.put("email", request.getParameter("email"));
 
         Map<String, String> wrongFields = userService.validateFields(fieldsMap);
 
+        User user = new User(fieldsMap.get("login"), fieldsMap.get("password"), fieldsMap.get("firstname"), fieldsMap.get("lastname"), fieldsMap.get("email"), User.Role.USER);
+
         if (wrongFields.isEmpty()) {
             try {
-                userService.create(login, password, firstname, lastname, email, User.Role.USER);
+                userService.create(user);
                 request.setAttribute("resultMessage", ContentManager.getProperty("registration.success", lang));
-            }
-            catch (NotUniqUserException e){
+            } catch (NotUniqUserException e) {
                 request.setAttribute("wrong_login", ContentManager.getProperty("registration.exception.notUniqUser", lang));
-            }
-            catch (RuntimeException re){
+            } catch (RuntimeException re) {
                 request.setAttribute("resultMessage", ContentManager.getProperty("exception.runtime", lang));
             }
 
@@ -61,10 +57,9 @@ public class RegistrationCommand implements Command {
         } else {
             for (String field : wrongFields.keySet()) {
 
-                request.setAttribute("wrong_"+field, ContentManager.getProperty("wrong."+field, lang));
-
+                request.setAttribute("wrong_" + field, ContentManager.getProperty("wrong." + field, lang));
             }
-            request.setAttribute("userDTO", new User(login, password, firstname, lastname, email, User.Role.USER));
+            request.setAttribute("userDTO", user);
 
             return "/WEB-INF/view/registration.jsp";
         }
