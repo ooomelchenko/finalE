@@ -1,5 +1,7 @@
 package delivery.model.entity;
 
+import java.util.Objects;
+
 public class Bill {
 
     private long id;
@@ -44,5 +46,20 @@ public class Bill {
     }
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bill bill = (Bill) o;
+        return total == bill.total &&
+                isPaid == bill.isPaid &&
+                Objects.equals(order, bill.order);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(total, isPaid, order);
     }
 }

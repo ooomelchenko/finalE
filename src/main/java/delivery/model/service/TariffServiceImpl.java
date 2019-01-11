@@ -42,8 +42,7 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public boolean update(Tariff tariff){
         try (TariffDao dao = daoFactoryAbst.createTariffDao()) {
-            dao.update(tariff);
-            return true;
+            return dao.update(tariff);
         }
     }
 }

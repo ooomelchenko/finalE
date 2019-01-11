@@ -1,5 +1,7 @@
 package delivery.model.entity;
 
+import delivery.util.bundleManagers.ViewManager;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +18,21 @@ public class User {
     private Role role = Role.GUEST;
     private List<Order> orders = new ArrayList<>();
 
-    public enum Role {GUEST, USER, ADMIN}
+    public enum Role {
+        GUEST(ViewManager.getProperty("jsp.guest.redirect")),
+        USER(ViewManager.getProperty("jsp.user.redirect")),
+        ADMIN(ViewManager.getProperty("jsp.admin.redirect"));
+
+        private String path;
+
+        public String getPath() {
+            return path;
+        }
+
+        Role(String path) {
+            this.path = path;
+        }
+    }
 
     public User() {
     }

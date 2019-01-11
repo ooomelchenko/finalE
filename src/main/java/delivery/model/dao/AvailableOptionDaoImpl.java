@@ -32,11 +32,13 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
             ResultSet rs = ps.getGeneratedKeys();
 
             if(rs.next()){
+
                 option.setId(rs.getLong(1));
+
                 return option;
             }
             else
-            return null;
+                return null;
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -200,14 +202,18 @@ public class AvailableOptionDaoImpl implements AvailableOptionDao {
             st.setLong(2, id_tariff);
 
             ResultSet rs = st.executeQuery();
-            rs.next();
 
-            AvailableOption availableOption = optionMapper.extractFromResultSet(rs);
+            if(rs.next()){
+                AvailableOption availableOption = optionMapper.extractFromResultSet(rs);
 
-            availableOption.setRoute(routeMapper.extractFromResultSet(rs));
-            availableOption.setTariff(tariffMapper.extractFromResultSet(rs));
+                availableOption.setRoute(routeMapper.extractFromResultSet(rs));
+                availableOption.setTariff(tariffMapper.extractFromResultSet(rs));
 
-            return availableOption;
+                return availableOption;
+            }
+            else
+                return null;
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

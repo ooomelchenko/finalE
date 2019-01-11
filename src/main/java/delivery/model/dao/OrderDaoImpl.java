@@ -41,7 +41,7 @@ public class OrderDaoImpl implements OrderDao {
             }
             else {
                 connection.rollback();
-                throw new RuntimeException();
+                throw new RuntimeException("order insert trouble");
             }
 
             stBill.setLong(1, order.getBill().getTotal());
@@ -58,7 +58,7 @@ public class OrderDaoImpl implements OrderDao {
             }
             else {
                 connection.rollback();
-                throw new RuntimeException();
+                throw new RuntimeException("bill insert trouble");
             }
 
             connection.commit();
@@ -89,13 +89,13 @@ public class OrderDaoImpl implements OrderDao {
 
             if(rs.next())
                 return mapper.extractFromResultSet(rs);
+            else
+                return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     @Override

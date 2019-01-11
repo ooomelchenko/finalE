@@ -67,14 +67,15 @@ public class UserDaoImpl implements UserDao {
             ResultSet rs = ps.executeQuery();
 
             if(rs.next())
-            return mapper.extractFromResultSet(rs);
+                return mapper.extractFromResultSet(rs);
+
+            else
+                return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     @Override
@@ -168,13 +169,14 @@ public class UserDaoImpl implements UserDao {
 
             if(rs.next())
                 return mapper.extractFromResultSet(rs);
+            else
+                return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
 
-        return null;
     }
 
     @Override

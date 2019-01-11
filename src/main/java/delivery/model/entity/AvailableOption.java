@@ -1,5 +1,7 @@
 package delivery.model.entity;
 
+import java.util.Objects;
+
 public class AvailableOption {
 
     private long id;
@@ -42,5 +44,19 @@ public class AvailableOption {
     }
     public void setTariff(Tariff tariff) {
         this.tariff = tariff;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AvailableOption that = (AvailableOption) o;
+        return Objects.equals(route, that.route) &&
+                Objects.equals(tariff, that.tariff);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(route, tariff);
     }
 }

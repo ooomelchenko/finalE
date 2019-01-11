@@ -35,8 +35,11 @@ public class BillDaoImpl implements BillDao {
 
             if(rs.next()){
                 bill.setId(rs.getLong(1));
+                return bill;
             }
-            return bill;
+            else
+                return null;
+
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -64,13 +67,13 @@ public class BillDaoImpl implements BillDao {
 
                 return bill;
             }
+            else
+                return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     @Override
@@ -185,6 +188,7 @@ public class BillDaoImpl implements BillDao {
 
             else{
                 connection.commit();
+
                 return true;
             }
 

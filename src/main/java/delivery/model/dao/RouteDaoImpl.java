@@ -36,8 +36,11 @@ public class RouteDaoImpl implements RouteDao {
 
             if(rs.next()){
                 route.setId(rs.getLong(1));
+                return route;
             }
-            return route;
+            else
+                return null;
+
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -64,10 +67,12 @@ public class RouteDaoImpl implements RouteDao {
 
             if(rs.next()){
                 routeLocalized.getRoute().setId(rs.getLong(1));
+                return routeLocalized;
             }
-            return routeLocalized;
-        }
-        catch (SQLException e){
+            else
+                return null;
+
+        } catch (SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -86,13 +91,13 @@ public class RouteDaoImpl implements RouteDao {
 
             if(rs.next())
                 return routeMapper.extractFromResultSet(rs);
+            else
+                return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     @Override

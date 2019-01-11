@@ -30,11 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> login(String login, String pass) {
-        Optional<User> result; //= Optional.empty();
         try (UserDao userDao = daoFactoryAbst.createUserDao()) {
-            result = Optional.ofNullable(userDao.findByLoginPassword(login, pass));
+            return Optional.ofNullable(userDao.findByLoginPassword(login, pass));
         }
-        return result;
     }
 
     @Override
@@ -47,17 +45,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
         try (UserDao userDao = daoFactoryAbst.createUserDao()) {
-            userDao.create(user);
+            return userDao.create(user);
         }
-        return null;
     }
 
     @Override
     public User create(String login, String pass, String firstName, String lastName, String email, User.Role role) {
         try (UserDao userDao = daoFactoryAbst.createUserDao()) {
-            userDao.create(new User(login, pass, firstName, lastName, email, User.Role.USER));
+            return userDao.create(new User(login, pass, firstName, lastName, email, User.Role.USER));
         }
-        return null;
     }
 
     @Override

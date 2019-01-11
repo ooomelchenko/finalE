@@ -2,6 +2,7 @@ package delivery.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Route {
 
@@ -48,5 +49,20 @@ public class Route {
     }
     public void setTariffList(List<Tariff> tariffList) {
         this.tariffList = tariffList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Route route = (Route) o;
+        return distanceKm == route.distanceKm &&
+                Objects.equals(routeStart, route.routeStart) &&
+                Objects.equals(routeEnd, route.routeEnd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(routeStart, routeEnd, distanceKm);
     }
 }

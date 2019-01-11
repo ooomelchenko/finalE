@@ -1,6 +1,7 @@
 package delivery.model.entity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Order {
 
@@ -79,5 +80,23 @@ public class Order {
     }
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return weightGr == order.weightGr &&
+                type == order.type &&
+                Objects.equals(arrivalDate, order.arrivalDate) &&
+                Objects.equals(availableOption, order.availableOption) &&
+                Objects.equals(bill, order.bill) &&
+                Objects.equals(user, order.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, weightGr, arrivalDate, availableOption, bill, user);
     }
 }

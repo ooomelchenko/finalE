@@ -32,8 +32,10 @@ public class TariffDaoImpl implements TariffDao {
 
             if(rs.next()){
                 tariff.setId(rs.getLong(1));
+                return tariff;
             }
-            return tariff;
+            else
+                return null;
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -54,13 +56,13 @@ public class TariffDaoImpl implements TariffDao {
 
             if(rs.next())
                 return mapper.extractFromResultSet(rs);
+            else
+                return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     @Override
