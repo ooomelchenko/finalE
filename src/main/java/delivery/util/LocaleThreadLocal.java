@@ -1,12 +1,13 @@
 package delivery.util;
 
 import java.util.Locale;
+import java.util.Optional;
 
 public class LocaleThreadLocal {
     private static final ThreadLocal<Locale> threadLocalScope = new  ThreadLocal<>();
 
     public static Locale getLocale() {
-        return threadLocalScope.get();
+        return Optional.ofNullable(threadLocalScope.get()).orElse(Locale.getDefault());
     }
 
     public static void setLocale(Locale locale) {
