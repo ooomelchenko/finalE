@@ -36,7 +36,7 @@ public class RoutesCommand implements Command {
 
         int currentPortion = Math.min(portion, countOfPortions) ;
 
-        int start = (currentPortion-1)*portionSize;
+        int start = Math.max(0, (currentPortion-1)*portionSize);
 
         int end = Math.min(start+portionSize, routeList.size());
 

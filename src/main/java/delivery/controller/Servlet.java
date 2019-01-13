@@ -27,25 +27,29 @@ public class Servlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        log.info("Servlet doGet");
         processRequest(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        log.info("Servlet doPost");
         processRequest(request, response);
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        log.debug("Servlet processRequest");
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
-       // log.debug("processRequest");
+
         String page ;
 
         ActionFactory client = new ActionFactory();
         Command command = client.defineCommand(request);
+        log.debug("Command ActionFactory page: "+command.getClass());
         page = command.execute(request, response);
-// метод возвращает страницу ответа
+        log.debug("Command return page: "+page);
         if (page != null) {
             if(page.contains("redirect")){
                 response.sendRedirect(page.replace(":redirect", ""));
