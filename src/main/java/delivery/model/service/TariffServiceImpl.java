@@ -3,10 +3,11 @@ package delivery.model.service;
 import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.dao.TariffDao;
 import delivery.model.entity.Tariff;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class TariffServiceImpl implements TariffService {
 
     private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();

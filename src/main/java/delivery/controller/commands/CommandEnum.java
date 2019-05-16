@@ -13,7 +13,7 @@ public enum CommandEnum {
     LOGOUT ("LOGOUT", new LogoutCommand()) {},
     USER ("USER", new UserCommand(new UserServiceImpl(), new OrderServiceImpl())) {},
     ADMIN ("ADMIN", new AdminCommand(new TariffServiceImpl())) {},
-    ROUTES ("ROUTES", new RoutesCommand(new RouteServiceImpl())) {},
+    ROUTES ("ROUTES", new RoutesCommand()) {},
     TARIFFS ("TARIFFS", new TariffsCommand(new TariffServiceImpl())) {},
     CALCULATOR ("CALCULATOR", new CalculatorCommand(new RouteServiceImpl(), new TariffServiceImpl())) {},
     CALCULATE ("CALCULATE", new CalculateDeliveryPriceAjaxCommand(new RouteServiceImpl(), new TariffServiceImpl(), new CalculatorServiceImpl())) {},

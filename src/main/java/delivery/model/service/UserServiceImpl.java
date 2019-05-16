@@ -4,13 +4,26 @@ import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.dao.UserDao;
 import delivery.model.entity.User;
 import delivery.util.bundleManagers.RegexManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Service
 public class UserServiceImpl implements UserService {
+
+    private RouteService routeService ;
+
+    public RouteService getRouteService() {
+        return routeService;
+    }
+
+    @Autowired
+    public void setRouteService(RouteService routeService) {
+        this.routeService = routeService;
+    }
 
     private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();
 

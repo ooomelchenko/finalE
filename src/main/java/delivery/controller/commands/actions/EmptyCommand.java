@@ -5,6 +5,7 @@ import delivery.controller.commands.Command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Deprecated
 public class EmptyCommand implements Command {
 
     @Override

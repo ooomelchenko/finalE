@@ -3,9 +3,10 @@ package delivery.model.service;
 import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.dao.OrderDao;
 import delivery.model.entity.Order;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class OrderServiceImpl implements OrderService {
 
     private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();

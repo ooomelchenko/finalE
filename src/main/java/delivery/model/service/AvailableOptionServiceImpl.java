@@ -3,10 +3,12 @@ package delivery.model.service;
 import delivery.model.dao.AvailableOptionDao;
 import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.entity.AvailableOption;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class AvailableOptionServiceImpl implements AvailableOptionService {
 
     private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();

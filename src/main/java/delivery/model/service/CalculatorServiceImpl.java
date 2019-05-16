@@ -2,9 +2,10 @@ package delivery.model.service;
 
 import delivery.model.entity.Route;
 import delivery.model.entity.Tariff;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-
+@Service
 public class CalculatorServiceImpl implements CalculatorService {
 
     @Override

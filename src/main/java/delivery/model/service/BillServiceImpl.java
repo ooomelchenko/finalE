@@ -3,9 +3,10 @@ package delivery.model.service;
 import delivery.model.dao.BillDao;
 import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.entity.Bill;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class BillServiceImpl implements BillService {
 
     private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();

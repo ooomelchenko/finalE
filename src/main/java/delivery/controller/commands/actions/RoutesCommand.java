@@ -4,6 +4,7 @@ import delivery.controller.commands.Command;
 import delivery.model.entity.Route;
 import delivery.model.service.RouteService;
 import delivery.util.bundleManagers.ConfigurationManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,17 +13,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class RoutesCommand implements Command {
 
-    private RouteService routeService ;
+    @Autowired
+    private RouteService routeService;
 
-    public RoutesCommand(RouteService routeService) {
-        this.routeService = routeService;
+    /*private RouteService routeService = initRouteService();
+
+    RouteService initRouteService() {
+        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+        return (RouteService) context.getBean("routeServiceImpl");
+    }*/
+
+    public RoutesCommand() {
     }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
+       // ApplicationContext context = (ApplicationContext) request.getServletContext().getAttribute("springContext");
+     //   routeService = (RouteService) context.getBean("routeServiceImpl");
         int portionSize = Integer.parseInt(ConfigurationManager.getProperty("page_portion"));
 
         List<Route> routeList = routeService.getAllRoutes()

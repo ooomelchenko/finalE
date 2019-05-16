@@ -4,13 +4,19 @@ import delivery.model.dao.DaoFactoryAbst;
 import delivery.model.dao.RouteDao;
 import delivery.model.dto.RouteLocale;
 import delivery.model.entity.Route;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class RouteServiceImpl implements RouteService {
 
-    private DaoFactoryAbst daoFactoryAbst = DaoFactoryAbst.getInstance();
+    private DaoFactoryAbst daoFactoryAbst;
+
+    public RouteServiceImpl() {
+        this.daoFactoryAbst = DaoFactoryAbst.getInstance();
+    }
 
     @Override
     public List<Route> getAllRoutes() {
